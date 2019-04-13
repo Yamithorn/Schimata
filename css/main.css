@@ -1,0 +1,38 @@
+.body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    background-color: antiquewhite;
+    /* align-items: space-between; */
+}
+
+.head {
+    padding: 0;
+    margin: 0;
+}
+
+#canvas-field {
+    margin-top: 50px;
+    /* width: 720px;
+    height: 720px; */
+    border: solid black;
+    background-color: white;
+    /* background: sandybrown; */
+    /* background: black; */
+}
+
+.board {
+    /* border: solid black; */
+}
+
+#canvas-board {
+    /* width: 480px;
+    height: 480px;
+    border: solid black;
+    background: #eee; */
+    /* display: block;
+    margin: 0 auto; */
+}
