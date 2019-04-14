@@ -50,31 +50,17 @@ export default function CanvasState(canvas) {
         for (let i = len - 1; i >= 0; i--) {
             if (shapes[i].contains(mouseX, mouseY)) {
 
-                // let selectedShape = shapes[i];
-                // // Keep track of where we clicked in the object so we can move it smoothly
-                // that.dragoffX = mouseX - selectedShape.xCoord;
-                // that.dragoffY = mouseY - selectedShape.yCoord;
-                // that.dragging = true;
-                // that.selection = selectedShape;
-                // that.valid = false;
-                // return;
-
                 that.mouseActive = true;
-
                 let selectedShape = shapes[i];
-                // let length = shapes[i].colorArray.length;
-                let length = selectedShape.shapeArray.length;
+                let length = selectedShape.cellArray.length;
                 // debugger;
 
-                for (let j = length - 1; j >= 0; j--) {
+                for (let j = 0; j < length; j++) {
                     // Keep track of where we clicked in the object so we can move it smoothly
-                    that.dragoffXArray.push(mouseX - selectedShape.shapeArray[j].xCoord);
-                    that.dragoffYArray.push(mouseY - selectedShape.shapeArray[j].yCoord);
-                    // debugger;
-                    // that.dragoffXArray.push(mouseX - selectedShape.xCoordArray[j]);
-                    // that.dragoffYArray.push(mouseY - selectedShape.yCoordArray[j]);
+                    that.dragoffXArray.push(mouseX - selectedShape.cellArray[j].xPos);
+                    that.dragoffYArray.push(mouseY - selectedShape.cellArray[j].yPos);
                     that.dragging = true;
-                    that.selection = selectedShape.shapeArray;
+                    that.selection = selectedShape.cellArray;
                     that.valid = false;
                 }
                 // debugger;
@@ -92,22 +78,14 @@ export default function CanvasState(canvas) {
     canvas.addEventListener("mousemove", function (e) {
 
         if (that.dragging) {
-            // debugger;
-            let mouse = that.getMouse(e);
-            // We want to drag the shape from where we clicked it, which is why we saved the offset
-            // that.selection.xCoord = mouse.x - that.dragoffX;
-            // that.selection.yCoord = mouse.y - that.dragoffY;
-            // that.valid = false; // Something is dragging so we must redraw
 
-            // let length = that.selection.colorArray.length;
+            let mouse = that.getMouse(e);
             let length = that.selection.length;
 
             for (let i = 0; i < length; i++) {
-                // that.selection.xCoordArray[i] = mouse.x - that.dragoffXArray[i];
-                // that.selection.yCoordArray[i] = mouse.y - that.dragoffYArray[i];
-                // console.log(that.selection);
-                that.selection[i].xCoord = mouse.x - that.dragoffXArray[i];
-                that.selection[i].yCoord = mouse.y - that.dragoffYArray[i];
+                // Have the other cells move based on the current locus cell's grid position and triangulate their positions from there
+                that.selection[i].xPos = mouse.x - that.dragoffXArray[i];
+                that.selection[i].yPos = mouse.y - that.dragoffYArray[i];
                 that.valid = false; // Something is dragging so we must redraw
             }
         }
@@ -118,7 +96,7 @@ export default function CanvasState(canvas) {
         that.dragoffXArray = [];
         that.dragoffYArray = [];
         that.mouseActive = false;
-        that.selection = null;
+        // that.selection = null;
         that.valid = false;
         // debugger;
     }, true);
@@ -134,16 +112,16 @@ export default function CanvasState(canvas) {
 
         // Add logic for shapes to snap onto grid
         // use the mouseX and mouseY and see if it is overlapping within the grid
-        
+        // debugger;
         if (that.selection) {
             let mouse = that.getMouse(e);
 
-            // let length = that.selection.colorArray.length;
             let length = that.selection.length;
-            // that.selection
-            // debugger;
+
             for (let i = 0; i < length; i++) {
                 // that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108); // Add this back in
+                // debugger;
+                that.selection[i].clicked = false;
                 that.valid = false; // Something is dragging so we must redraw
             }
         }
@@ -196,8 +174,8 @@ CanvasState.prototype.draw = function () {
             for (let i = 0; i < length; i++) {
                 // if (shape.xCoordArray[i] > this.width || shape.yCoordArray[i] > this.height || 
                 //     shape.xCoordArray[i] + shape.shapeWidthArray[i] < 0 || shape.yCoordArray[i] + shape.shapeHeightArray[i] < 0) continue;
-                if (shape[i].xCoord > this.width || shape[i].yCoord > this.height ||
-                    shape[i].xCoord + shape[i].shapeWidth < 0 || shape[i].yCoord + shape[i].shapeHeight < 0) continue;
+                if (shape[i].xPos > this.width || shape[i].yPos > this.height ||
+                    shape[i].xPos + shape[i].cellSize < 0 || shape[i].yPos + shape[i].cellSize < 0) continue;
             }
 
             shapes[i].draw(context);
@@ -229,8 +207,8 @@ CanvasState.prototype.draw = function () {
                 // debugger;
                 // context.strokeRect(selectedShape.xCoordArray[i], selectedShape.yCoordArray[i], 
                 //     selectedShape.shapeWidthArray[i], selectedShape.shapeHeightArray[i]);
-                context.strokeRect(selectedShape[i].xCoord, selectedShape[i].yCoord, 
-                    selectedShape[i].shapeWidth, selectedShape[i].shapeHeight);
+                context.strokeRect(selectedShape[i].xPos, selectedShape[i].yPos, 
+                    selectedShape[i].cellSize, selectedShape[i].cellSize);
             }
         }
 

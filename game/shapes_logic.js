@@ -1,59 +1,34 @@
-export default function ShapeContainer(shapeArray) { // shapeArray is an array that store shape objects to draw them
-    
-    // let length = shapeArray.length;
+// Possibly to refactor, had a boolean (default false) for each cell and when clicked on, it turns to true
+// and have base coordinates of where each cell is located and have it unique to each of them then based on which one is clicked
+// have them rearrange themselves within the grid and have it work side to side with a 5 by array of booleans to tell the state if each
+// cell inside of the puzzle field
 
-    // this.xCoordArray = [];
-    // this.yCoordArray = [];
-    // this.shapeWidthArray = [];
-    // this.shapeHeightArray = [];
-    // this.colorArray = [];
-
-    this.shapeArray = shapeArray;
-
-    // Possibly to refactor, had a boolean (default false) for each cell and when clicked on, it turns to true
-    // and have base coordinates of where each cell is located and have it unique to each of them then based on which one is clicked
-        // have them rearrange themselves within the grid and have it work side to side with a 5 by array of booleans to tell the state if each
-        // cell inside of the puzzle field
-
-    // for (let i = 0; i < length; i++) {
-    //     this.xCoordArray.push(shapeArray[i].xCoord);
-    //     this.yCoordArray.push(shapeArray[i].yCoord);
-    //     this.shapeWidthArray.push(shapeArray[i].shapeWidth);
-    //     this.shapeHeightArray.push(shapeArray[i].shapeHeight);
-    //     this.colorArray.push(shapeArray[i].color);
-    // }
+export default function ShapeContainer(cellArray) { // cellArray is an array that stores cells to draw them
+    this.cellArray = cellArray;
 }
 
 ShapeContainer.prototype.draw = function (context) {
 
-    // let length = this.colorArray.length;
-    let length = this.shapeArray.length;
+    let length = this.cellArray.length;
 
     for (let i = 0; i < length; i++) {
-        // console.log(this.shapeArray[i].message);
-        // debugger
-        context.fillStyle = this.shapeArray[i].color;
-        context.fillRect(this.shapeArray[i].xCoord, this.shapeArray[i].yCoord, this.shapeArray[i].shapeWidth, this.shapeArray[i].shapeHeight);
+        // debugger;
+        // add conditional for when it is clicked to toggle between colors
+        context.fillStyle = this.cellArray[i].clicked ? this.cellArray[i].clickedColor : this.cellArray[i].baseColor;
+        context.fillRect(this.cellArray[i].xPos, this.cellArray[i].yPos, this.cellArray[i].cellSize, this.cellArray[i].cellSize);
     }
 };
 
 ShapeContainer.prototype.contains = function (mouseX, mouseY) {
 
-    // let length = this.colorArray.length;
-    let length = this.shapeArray.length;
+    let length = this.cellArray.length;
 
     for (let i = 0; i < length; i++) {
-        // if ((mouseX >= this.xCoordArray[i]) && (mouseX <= (this.xCoordArray[i] + this.shapeWidthArray[i])) && 
-        //     (mouseY >= this.yCoordArray[i]) && (mouseY <= (this.yCoordArray[i] + this.shapeHeightArray[i]))) {
-        if ((mouseX >= this.shapeArray[i].xCoord) && (mouseX <= (this.shapeArray[i].xCoord + this.shapeArray[i].shapeWidth)) &&
-            (mouseY >= this.shapeArray[i].yCoord) && (mouseY <= (this.shapeArray[i].yCoord + this.shapeArray[i].shapeHeight))) {
-                // debugger;
-                this.shapeArray[i].color = "pink";
-                // Make this cell true
-                //have it store the state of the cell clicked as well, otherwise it is null
-                // debugger;
-                //this.shapeArray[i].clicked = true;
-                // console.log(this.shapeArray[i].message);
+        if ((mouseX >= this.cellArray[i].xPos) && (mouseX <= (this.cellArray[i].xPos + this.cellArray[i].cellSize)) &&
+            (mouseY >= this.cellArray[i].yPos) && (mouseY <= (this.cellArray[i].yPos + this.cellArray[i].cellSize))) {
+                // Make this cell true by having it store the state of the cell clicked as well, otherwise it is null
+                // console.log(this.cellArray[i].message);
+                this.cellArray[i].clicked = true;
                 return true;
                 // console.log("clicking");
         }
@@ -70,7 +45,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
                 (mouseY >= gridYPosition + (gridCellSize * i)) && (mouseY <= gridYPosition + (gridCellSize * (i + 1)))) {
 
                     // let length = this.colorArray.length;
-                    let length = this.shapeArray.length;
+                    let length = this.cellArray.length;
 
                     for (let k = 0; k < length; k++) {
                         // this.xCoordArray[k] = gridXPosition + (gridCellSize * j);

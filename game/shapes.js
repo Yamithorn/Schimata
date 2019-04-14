@@ -19,34 +19,52 @@ const basic = [
 ];
 
 class Square {
-    constructor(xGrid, yGrid, xPos, yPos, width, height, baseColor, clickedColor, clicked, state, message) {
+    constructor(xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message) {
         this.xGrid = xGrid;
         this.yGrid = yGrid;
         this.xPos = xPos;
         this.yPos = yPos;
-        this.width = width;
-        this.height = height;
+        this.cellSize = cellSize;
         this.baseColor = baseColor;
         this.clickedColor = clickedColor;
         this.clicked = clicked;
-        this.state = state;
+        this.state = state; // locus for dragging (point of focus)
         this.message = message;
+    }
+}
+
+class Shape {
+    constructor(...cells) {
+
     }
 }
 
 // When working, try doing a collection of squares of the class
 
 // 1 by 1
+// export const singleCellShape = [
+//     {   // 1
+//         xCoord: 10, // Try to convert to single digits and multiply them
+//         yCoord: 10, // Try to convert to single digits and multiply them
+//         shapeWidth: 108,
+//         shapeHeight: 108,
+//         color: "#3cba54",
+//         clicked: false,
+//         message: "0, 0 is being clicked"
+//     }
+// ];
+
 export const singleCellShape = [
-    {   // 1
-        xCoord: 10, // Try to convert to single digits and multiply them
-        yCoord: 10, // Try to convert to single digits and multiply them
-        shapeWidth: 108,
-        shapeHeight: 108,
-        color: "#3cba54",
-        clicked: false,
-        message: "0, 0 is being clicked"
-    }
+    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+    new Square(0, 0, 0, 0, 108, "#3cba54", "pink", false, null, "(0,0) is being clicked")
+];
+
+export const squareCellShape = [
+    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+    new Square(0, 0, 0, 138, 108, "#db3236", "pink", false, null, "(0,0) is being clicked"),
+    new Square(0, 1, 0, 246, 108, "#db3236", "pink", false, null, "(0,1) is being clicked"),
+    new Square(1, 0, 108, 138, 108, "#db3236", "pink", false, null, "(1,0) is being clicked"),
+    new Square(1, 1, 108, 246, 108, "#db3236", "pink", false, null, "(1,1) is being clicked")
 ];
 
 // 2 by 2

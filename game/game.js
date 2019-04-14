@@ -1,6 +1,6 @@
 import ShapeContainer from "./shapes_logic";
 import CanvasState from "./canvas";
-import { singleCellShape, doubleCellShape, squareShape, smallTShape, littleLShape, bigLShape } from "./shapes";
+import { singleCellShape, doubleCellShape, squareCellShape, smallTShape, littleLShape, bigLShape } from "./shapes";
 
 function init() {
     const canvasField = document.getElementById("canvas-field");
@@ -14,7 +14,7 @@ function init() {
     let state = new CanvasState(canvasField);
     // cell is 108 by 108
     state.addShape(new ShapeContainer(singleCellShape));
-    state.addShape(new ShapeContainer(squareShape));
+    state.addShape(new ShapeContainer(squareCellShape));
     // state.addShape(new ShapeContainer(smallTShape));
     // state.addShape(new ShapeContainer(littleLShape));
     // state.addShape(new ShapeContainer(bigLShape));
