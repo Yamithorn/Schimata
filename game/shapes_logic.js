@@ -5,6 +5,7 @@
 
 export default function ShapeContainer(cellArray) { // cellArray is an array that stores cells to draw them
     this.cellArray = cellArray;
+    this.locus = null;
 }
 
 ShapeContainer.prototype.draw = function (context) {
@@ -28,6 +29,7 @@ ShapeContainer.prototype.contains = function (mouseX, mouseY) {
             (mouseY >= this.cellArray[i].yPos) && (mouseY <= (this.cellArray[i].yPos + this.cellArray[i].cellSize))) {
                 // Make this cell true by having it store the state of the cell clicked as well, otherwise it is null
                 // console.log(this.cellArray[i].message);
+                this.locus = [0, 0]; // [this.cellArray[i].xGrid, this.cellArray[i].yGrid]; //
                 this.cellArray[i].clicked = true;
                 return true;
                 // console.log("clicking");
@@ -44,16 +46,76 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
             if ((mouseX >= gridXPosition + (gridCellSize * j)) && (mouseX <= gridXPosition + (gridCellSize * (j + 1))) &&
                 (mouseY >= gridYPosition + (gridCellSize * i)) && (mouseY <= gridYPosition + (gridCellSize * (i + 1)))) {
 
-                    // let length = this.colorArray.length;
-                    let length = this.cellArray.length;
+                let length = this.cellArray.length;
 
-                    for (let k = 0; k < length; k++) {
-                        // this.xCoordArray[k] = gridXPosition + (gridCellSize * j);
-                        // this.yCoordArray[k] = gridYPosition + (gridCellSize * i);
+                for (let k = 0; k < length; k++) {
+
+                    // debugger;
+                    if (this.locus[0] > this.cellArray[k].xGrid) {
+    
+                        if (this.locus[1] > this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = (gridXPosition + (gridCellSize * j)) - (this.cellArray[k].xGrid * gridCellSize);
+                            this.cellArray[k].yPos = (gridYPosition + (gridCellSize * i)) - (this.cellArray[k].yGrid * gridCellSize);
+                        }
+
+                        else if (this.locus[1] === this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = (gridXPosition + (gridCellSize * j)) - (this.cellArray[k].xGrid * gridCellSize);
+                            this.cellArray[k].yPos = gridYPosition + (gridCellSize * i);
+                        }
+
+                        else if (this.locus[1] < this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = (gridXPosition + (gridCellSize * j)) - (this.cellArray[k].xGrid * gridCellSize);
+                            this.cellArray[k].yPos = (gridYPosition + (gridCellSize * i)) + (this.cellArray[k].yGrid * gridCellSize);
+                        }
                     }
 
-                    // console.log(`The x coordinate for the cell is ${this.xCoordArray[j]} and the coordinate is ${gridCellSize * i}`);
-                    // console.log(`The y coordinate for the cell is ${this.yCoordArray[i]} and the coordinate is ${gridCellSize * i}`);
+                    else if (this.locus[0] === this.cellArray[k].xGrid) {
+                        
+                        if (this.locus[1] > this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = gridXPosition;
+                            this.cellArray[k].yPos = (gridYPosition + (gridCellSize * i)) - (this.cellArray[k].yGrid * gridCellSize);
+                        }
+
+                        else if (this.locus[1] === this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = gridXPosition + (gridCellSize * j);
+                            this.cellArray[k].yPos = gridYPosition + (gridCellSize * i);
+                        }
+
+                        else if (this.locus[1] < this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = gridXPosition + (gridCellSize * j);
+                            this.cellArray[k].yPos = (gridYPosition + (gridCellSize * i)) + (this.cellArray[k].yGrid * gridCellSize);
+                        }
+                    }
+
+                    else if (this.locus[0] < this.cellArray[k].xGrid) { 
+                        
+                        if (this.locus[1] > this.cellArray[k].yGrid) {
+                            // debugger;
+                            // this.cellArray[k].xPos = (gridXPosition + (gridCellSize * j));
+                            this.cellArray[k].xPos = (gridXPosition + (gridCellSize * (j - this.cellArray[k].xGrid)));
+                            this.cellArray[k].yPos = (gridYPosition + (gridCellSize * i)) - (this.cellArray[k].yGrid * gridCellSize);
+                        }
+
+                        else if (this.locus[1] === this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = (gridXPosition + (gridCellSize * j)) + (this.cellArray[k].xGrid * gridCellSize);
+                            this.cellArray[k].yPos = gridYPosition + (gridCellSize * i) + (this.cellArray[k].yGrid * gridCellSize);
+                        }
+
+                        else if (this.locus[1] < this.cellArray[k].yGrid) {
+                            // debugger;
+                            this.cellArray[k].xPos = (gridXPosition + (gridCellSize * j)) + (this.cellArray[k].xGrid * gridCellSize);
+                            this.cellArray[k].yPos = (gridYPosition + (gridCellSize * i)) + (this.cellArray[k].yGrid * gridCellSize);
+                        }
+                    }
+                }
+                return;
             }
         }
     }

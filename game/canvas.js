@@ -60,7 +60,7 @@ export default function CanvasState(canvas) {
                     that.dragoffXArray.push(mouseX - selectedShape.cellArray[j].xPos);
                     that.dragoffYArray.push(mouseY - selectedShape.cellArray[j].yPos);
                     that.dragging = true;
-                    that.selection = selectedShape.cellArray;
+                    that.selection = selectedShape;
                     that.valid = false;
                 }
                 // debugger;
@@ -74,18 +74,18 @@ export default function CanvasState(canvas) {
             that.valid = false;
         }
     }, true);
-    // PROBLEM IS HERE
+    
     canvas.addEventListener("mousemove", function (e) {
 
         if (that.dragging) {
 
             let mouse = that.getMouse(e);
-            let length = that.selection.length;
+            let length = that.selection.cellArray.length;
 
             for (let i = 0; i < length; i++) {
                 // Have the other cells move based on the current locus cell's grid position and triangulate their positions from there
-                that.selection[i].xPos = mouse.x - that.dragoffXArray[i];
-                that.selection[i].yPos = mouse.y - that.dragoffYArray[i];
+                that.selection.cellArray[i].xPos = mouse.x - that.dragoffXArray[i];
+                that.selection.cellArray[i].yPos = mouse.y - that.dragoffYArray[i];
                 that.valid = false; // Something is dragging so we must redraw
             }
         }
@@ -116,14 +116,15 @@ export default function CanvasState(canvas) {
         if (that.selection) {
             let mouse = that.getMouse(e);
 
-            let length = that.selection.length;
+            let length = that.selection.cellArray.length;
 
             for (let i = 0; i < length; i++) {
-                // that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108); // Add this back in
-                // debugger;
-                that.selection[i].clicked = false;
-                that.valid = false; // Something is dragging so we must redraw
+                // that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108);
+                that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108);
+                that.selection.cellArray[i].clicked = false;
             }
+            that.selection.locus = null;
+            that.valid = false; // Something is dragging so we must redraw
         }
     }, true);
 
@@ -199,16 +200,17 @@ CanvasState.prototype.draw = function () {
         context.stroke();
 
         if ((this.selection != null) && this.mouseActive) {
+            // debugger;
             context.strokeStyle = this.selectionColor;
             // context.lineWidth = this.selectionWidth;
             let selectedShape = this.selection;
-            let length = selectedShape.length;
+            let length = selectedShape.cellArray.length;
             for (let i = 0; i < length; i++) {
                 // debugger;
                 // context.strokeRect(selectedShape.xCoordArray[i], selectedShape.yCoordArray[i], 
                 //     selectedShape.shapeWidthArray[i], selectedShape.shapeHeightArray[i]);
-                context.strokeRect(selectedShape[i].xPos, selectedShape[i].yPos, 
-                    selectedShape[i].cellSize, selectedShape[i].cellSize);
+                context.strokeRect(selectedShape.cellArray[i].xPos, selectedShape.cellArray[i].yPos, 
+                    selectedShape.cellArray[i].cellSize, selectedShape.cellArray[i].cellSize);
             }
         }
 

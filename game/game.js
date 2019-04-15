@@ -1,6 +1,7 @@
 import ShapeContainer from "./shapes_logic";
 import CanvasState from "./canvas";
-import { singleCellShape, doubleCellShape, squareCellShape, smallTShape, littleLShape, bigLShape } from "./shapes";
+import { singleCellShape, singleCellShapeTwo, singleCellShapeThree, singleCellShapeFour, 
+    doubleCellShape, squareCellShape, squareCellShapeTwo, smallTCellShape, smallLCellShape, bigLCellShape } from "./shapes";
 
 function init() {
     const canvasField = document.getElementById("canvas-field");
@@ -15,10 +16,14 @@ function init() {
     // cell is 108 by 108
     state.addShape(new ShapeContainer(singleCellShape));
     state.addShape(new ShapeContainer(squareCellShape));
-    // state.addShape(new ShapeContainer(smallTShape));
-    // state.addShape(new ShapeContainer(littleLShape));
-    // state.addShape(new ShapeContainer(bigLShape));
-    // state.addShape(new ShapeContainer(doubleCellShape));
+    state.addShape(new ShapeContainer(smallTCellShape));
+    state.addShape(new ShapeContainer(smallLCellShape));
+    state.addShape(new ShapeContainer(bigLCellShape));
+    state.addShape(new ShapeContainer(doubleCellShape));
+    state.addShape(new ShapeContainer(singleCellShapeTwo));
+    state.addShape(new ShapeContainer(singleCellShapeThree));
+    state.addShape(new ShapeContainer(singleCellShapeFour));
+    state.addShape(new ShapeContainer(squareCellShapeTwo));
 }
 
 init();
