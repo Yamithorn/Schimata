@@ -30,7 +30,7 @@ ShapeContainer.prototype.contains = function (mouseX, mouseY) {
                 // Make this cell true by having it store the state of the cell clicked as well, otherwise it is null
                 // console.log(this.cellArray[i].message);
                 this.locus = [this.cellArray[i].xGrid, this.cellArray[i].yGrid]; // [0, 0]; //
-                console.log(this.cellArray[i].message);
+                // console.log(this.cellArray[i].message);
                 // debugger;
                 this.cellArray[i].clicked = true;
                 return true;
@@ -41,7 +41,7 @@ ShapeContainer.prototype.contains = function (mouseX, mouseY) {
 
 ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, gridYPosition, gridWidth, gridHeight, gridCellSize) {
 
-    let gridSize = (gridWidth / gridCellSize) * (gridHeight / gridCellSize);
+    let gridSize = (gridWidth / gridCellSize);
 
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
@@ -135,6 +135,27 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
     }
 };
 
-ShapeContainer.prototype.overlapOtherShape = function(firstShape, secondShape) {
-    
+ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
+    let cellArrayLength = this.cellArray.length;
+    let shapeLength = shape.cellArray.length;
+
+    for (let i = 0; i < cellArrayLength; i++) {
+        for (let j = 0; j < shapeLength; j++) {
+
+            if (this.cellArray[i].xPos < (shape.cellArray[j].xPos + Math.trunc(cellSize/2)) && 
+                (this.cellArray[i].xPos + Math.trunc(cellSize/2)) > shape.cellArray[j].xPos &&
+                this.cellArray[i].yPos < (shape.cellArray[j].yPos + Math.trunc(cellSize/2)) && 
+                (this.cellArray[i].yPos + Math.trunc(cellSize/2)) > shape.cellArray[j].yPos) {
+            // if (this.cellArray[i].xPos < (shape.cellArray[j].xPos + cellSize) &&
+            //     (this.cellArray[i].xPos + cellSize) > shape.cellArray[j].xPos &&
+            //     this.cellArray[i].yPos < (shape.cellArray[j].yPos + cellSize) &&
+            //     (this.cellArray[i].yPos + cellSize) > shape.cellArray[j].yPos) {
+
+                this.cellArray[i].xPos = this.cellArray[i].originX;
+                this.cellArray[i].yPos = this.cellArray[i].originY;
+                return true;
+            }
+        }
+    }
+    return false;
 };

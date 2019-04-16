@@ -1,5 +1,7 @@
 class Square {
     constructor(xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, message) {
+        this.originX = xPos;
+        this.originY = yPos;
         this.xGrid = xGrid;
         this.yGrid = yGrid;
         this.xPos = xPos;

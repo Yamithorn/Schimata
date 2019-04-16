@@ -4,6 +4,13 @@ export default function CanvasState(canvas) {
     this.height = canvas.height;
     this.context = canvas.getContext("2d");
     this.context.lineWidth = 2;
+    this.grid = [
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false]
+    ];
     // this.context.globalCompositeOperation = "destination-over";
 
     // When there is a border or padding, this will fix the coordinate issues that occur
@@ -29,6 +36,10 @@ export default function CanvasState(canvas) {
     this.dragoffXArray = []; //0;
     this.dragoffYArray = []; //0;
     this.mouseActive = false;
+
+    //
+    this.inside = false;
+    this.colliding = false;
 
     // Events
 
@@ -97,34 +108,75 @@ export default function CanvasState(canvas) {
         that.dragoffYArray = [];
         that.mouseActive = false;
         // that.selection = null;
+
+        // if (that.selection) {
+        //     let length = that.selection.cellArray.length;
+        //     for (let i = 0; i < length; i++) {
+        //         that.selection.cellArray[i].xPos = that.selection.cellArray[i].originX;
+        //         that.selection.cellArray[i].yPos = that.selection.cellArray[i].originY;
+        //         that.selection.cellArray[i].clicked = false;
+        //     }
+        // }
         that.valid = false;
         // debugger;
     }, true);
 
     canvas.addEventListener("mouseup", (e) => {
-        
+
         that.dragging = false;
         // Empty out arrays for future use
         that.dragoffXArray = [];
         that.dragoffYArray = [];
         that.mouseActive = false;
+        that.inside = false;
         // debugger;
 
         // Add logic for shapes to snap onto grid
         // use the mouseX and mouseY and see if it is overlapping within the grid
         // debugger;
         if (that.selection) {
-            let mouse = that.getMouse(e);
 
+            let totalShapesLength = this.shapes.length;
+            for (let i = 0; i < totalShapesLength; i++) {
+                if (that.selection.locus !== this.shapes[i].locus) {
+                    that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
+                }
+            }
+
+            let mouse = that.getMouse(e);
             let length = that.selection.cellArray.length;
 
             for (let i = 0; i < length; i++) {
-                // that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108);
-                that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108);
+                if (that.selection.cellArray[i].xPos > (740 - 54) && that.selection.cellArray[i].yPos > (0 - 54) && 
+                    that.selection.cellArray[i].xPos + 54 < 1280 && that.selection.cellArray[i].yPos + 54 < 540) {
+                        that.inside = true;
+                }
+                else {
+                    that.inside = false; 
+                    for (let j = 0; j < length; j++) {
+                        // SLIGHTLY BUGGY BUT STILL WORKS
+                        that.selection.cellArray[j].xPos = that.selection.cellArray[j].originX;
+                        that.selection.cellArray[j].yPos = that.selection.cellArray[j].originY;
+                    }
+                    break;
+                }
+            }
+            // debugger;
+            if (that.inside && !that.colliding) {
+                for (let i = 0; i < length; i++) {
+                    // add in logic to make sure all of the shapes are within the square for it to snap
+                    that.selection.overlapping(mouse.x, mouse.y, 740, 0, 540, 540, 108);
+                    that.selection.cellArray[i].clicked = false;
+                }
+
+                that.selection.locus = null;
+                that.valid = false; // Something is dragging so we must redraw
+                that.inside = false;
+            }
+
+            for (let i = 0; i < length; i++) {
                 that.selection.cellArray[i].clicked = false;
             }
-            that.selection.locus = null;
-            that.valid = false; // Something is dragging so we must redraw
         }
     }, true);
 
