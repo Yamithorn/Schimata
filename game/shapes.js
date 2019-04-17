@@ -12,6 +12,7 @@ class Square {
         this.clicked = clicked;
         // this.state = state; // locus for dragging (point of focus)
         this.message = message;
+        this.cover = [null, null];
     }
 }
 
