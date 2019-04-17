@@ -134,6 +134,30 @@ export default function CanvasState(canvas) {
         // debugger;
     }, true);
 
+    document.addEventListener("keydown", (e) => {
+        if (e.keyCode === 81) {
+
+            let shapesLength = that.shapes.length;
+            let gridLength = that.grid.length;
+
+            for (let i = 0; i < shapesLength; i++) {
+                for (let j = 0; j < that.shapes[i].cellArray.length; j++) {
+                    // debugger;
+                    that.shapes[i].cellArray[j].xPos = that.shapes[i].cellArray[j].originX;
+                    that.shapes[i].cellArray[j].yPos = that.shapes[i].cellArray[j].originY;
+                }
+            }
+
+            for (let i = 0; i < gridLength; i++) {
+                for (let j = 0; j < gridLength; j++) {
+                    that.grid[i][j] = false;
+                }
+            }
+
+            that.valid = false;
+        }
+    }, true);
+
     canvas.addEventListener("mouseup", (e) => {
 
         that.dragging = false;
@@ -182,7 +206,7 @@ export default function CanvasState(canvas) {
                         }
                     }
                     // debugger;
-                    console.log(that.grid);
+                    // console.log(that.grid);
                     that.inside = false; 
                     break;
                 }
@@ -196,7 +220,7 @@ export default function CanvasState(canvas) {
                     that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
                     that.selection.cellArray[i].clicked = false;
                 }
-                console.log(that.grid);
+                // console.log(that.grid);
                 // console.log(that.selection);
 
                 that.selection.locus = null;
