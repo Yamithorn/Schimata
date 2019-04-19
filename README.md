@@ -1,6 +1,4 @@
-# javascript-project
-
-## **Schimata (Inventory Management Simulator)**
+# **Schimata (Inventory Management Simulator)**
 
 ### **Background and Overview**
 
