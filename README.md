@@ -20,7 +20,7 @@ With IMS, users will be able to do the following:
 
 ### **Wireframe**
 
-![Wireframe](https://github.com/Yamithorn/javascript-project/blob/master/Wireframe.png)
+![Wireframe](https://github.com/Yamithorn/Schimata/blob/master/images/Wireframe.png)
 
 ### **MVPs**
 
