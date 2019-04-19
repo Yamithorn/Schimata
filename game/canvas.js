@@ -53,6 +53,9 @@ export default function CanvasState(canvas) {
     }, false);
 
     canvas.addEventListener("mousedown", function (e) {
+
+        new Audio("../sound/click.wav").play();
+
         let mouse = that.getMouse(e);
         let mouseX = mouse.x;
         let mouseY = mouse.y;
@@ -198,6 +201,7 @@ export default function CanvasState(canvas) {
                     for (let j = 0; j < length; j++) {
                         // SLIGHTLY BUGGY BUT STILL WORKS
                         // debugger;
+                        //////////////////////////////////////////////////////////////////////////////TRY WORKING FROM HERE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         that.selection.cellArray[j].xPos = that.selection.cellArray[j].originX;
                         that.selection.cellArray[j].yPos = that.selection.cellArray[j].originY;
 
