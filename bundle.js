@@ -152,8 +152,6 @@ function CanvasState(canvas) {
 
     canvas.addEventListener("mousedown", function (e) {
 
-        new Audio("../sound/click.wav").play();
-
         let mouse = that.getMouse(e);
         let mouseX = mouse.x;
         let mouseY = mouse.y;
@@ -846,22 +844,22 @@ ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
     for (let i = 0; i < cellArrayLength; i++) {
         for (let j = 0; j < shapeLength; j++) {
 
-            // if (this.cellArray[i].xPos < (shape.cellArray[j].xPos + Math.trunc(cellSize/2)) && 
-            //     (this.cellArray[i].xPos + Math.trunc(cellSize/2)) > shape.cellArray[j].xPos &&
-            //     this.cellArray[i].yPos < (shape.cellArray[j].yPos + Math.trunc(cellSize/2)) && 
-            //     (this.cellArray[i].yPos + Math.trunc(cellSize/2)) > shape.cellArray[j].yPos) {
-            if (this.cellArray[i].xPos < (shape.cellArray[j].xPos + cellSize) &&
-                (this.cellArray[i].xPos + cellSize) > shape.cellArray[j].xPos &&
-                this.cellArray[i].yPos < (shape.cellArray[j].yPos + cellSize) &&
-                (this.cellArray[i].yPos + cellSize) > shape.cellArray[j].yPos) {
+            if (this.cellArray[i].xPos < (shape.cellArray[j].xPos + Math.trunc(cellSize/2)) && 
+                (this.cellArray[i].xPos + Math.trunc(cellSize/2)) > shape.cellArray[j].xPos &&
+                this.cellArray[i].yPos < (shape.cellArray[j].yPos + Math.trunc(cellSize/2)) && 
+                (this.cellArray[i].yPos + Math.trunc(cellSize/2)) > shape.cellArray[j].yPos) {
+            // if (this.cellArray[i].xPos < (shape.cellArray[j].xPos + cellSize) &&
+            //     (this.cellArray[i].xPos + cellSize) > shape.cellArray[j].xPos &&
+            //     this.cellArray[i].yPos < (shape.cellArray[j].yPos + cellSize) &&
+            //     (this.cellArray[i].yPos + cellSize) > shape.cellArray[j].yPos) {
 
                 this.cellArray[i].xPos = this.cellArray[i].originX;
                 this.cellArray[i].yPos = this.cellArray[i].originY;
-                return true;
+                // return true;
             }
         }
     }
-    return false;
+    // return false;
 };
 
 /***/ })

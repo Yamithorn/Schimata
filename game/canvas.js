@@ -54,8 +54,6 @@ export default function CanvasState(canvas) {
 
     canvas.addEventListener("mousedown", function (e) {
 
-        new Audio("../sound/click.wav").play();
-
         let mouse = that.getMouse(e);
         let mouseX = mouse.x;
         let mouseY = mouse.y;
