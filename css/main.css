@@ -1,12 +1,16 @@
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 .body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    background-color: antiquewhite;
-    /* align-items: space-between; */
+    overflow-y: hidden;
 }
 
 .head {
@@ -14,25 +18,53 @@
     margin: 0;
 }
 
+.author {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
 #canvas-field {
-    margin-top: 50px;
-    /* width: 720px;
-    height: 720px; */
-    border: solid black;
-    background-color: white;
-    /* background: sandybrown; */
-    /* background: black; */
+    background-color: antiquewhite;
+    padding: 0;
+    margin: 0;
 }
 
-.board {
-    /* border: solid black; */
+#linkedin {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: 100px;
 }
 
-#canvas-board {
-    /* width: 480px;
-    height: 480px;
-    border: solid black;
-    background: #eee; */
-    /* display: block;
-    margin: 0 auto; */
+#personal-site {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    bottom: 105px;
+    left: 100px;
+}
+
+#github {
+    position: absolute;
+    width: 175px;
+    height: 50px;
+    bottom: 10px;
+    padding: 10px;
+}
+
+#angel-list {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    bottom: 105px;
+    left: 190px;
+    padding: 5px 10px 5px 10px;
+}
+
+#linkedin:hover, #personal-site:hover, #github:hover, #angel-list:hover {
+    background-color: #4885ed;
+    border-radius: 5px;
 }

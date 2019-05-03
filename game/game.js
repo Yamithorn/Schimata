@@ -1,29 +1,37 @@
-import ShapeContainer from "./shapes_logic";
-import CanvasState from "./canvas";
-import { singleCellShape, singleCellShapeTwo, singleCellShapeThree, singleCellShapeFour, 
-    doubleCellShape, squareCellShape, squareCellShapeTwo, smallTCellShape, smallLCellShape, bigLCellShape } from "./shapes";
+import CanvasMenu from "./menu";
+
+import Button from "./button";
 
 function init() {
+
     const canvasField = document.getElementById("canvas-field");
+    const documentField = document.getElementsByClassName("body")[0];
+    const documentFieldWidth = documentField.clientWidth;
+    const documentFieldHeight = documentField.clientHeight;
 
-    canvasField.setAttribute("width", "1280");
-    canvasField.setAttribute("height", "720");
+    canvasField.setAttribute("width", documentFieldWidth);
+    canvasField.setAttribute("height", documentFieldHeight);
 
-    // const ctx = canvasField.getContext("2d");
+    let menu = new CanvasMenu(canvasField);
 
-    // Corner square is 270 by 270
-    let state = new CanvasState(canvasField);
-    // cell is 108 by 108
-    state.addShape(new ShapeContainer(singleCellShape));
-    state.addShape(new ShapeContainer(squareCellShape));
-    state.addShape(new ShapeContainer(smallTCellShape));
-    state.addShape(new ShapeContainer(smallLCellShape));
-    state.addShape(new ShapeContainer(bigLCellShape));
-    state.addShape(new ShapeContainer(doubleCellShape));
-    state.addShape(new ShapeContainer(singleCellShapeTwo));
-    state.addShape(new ShapeContainer(singleCellShapeThree));
-    state.addShape(new ShapeContainer(singleCellShapeFour));
-    state.addShape(new ShapeContainer(squareCellShapeTwo));
+    // width, height, xPos, yPos, baseColor, clickedColor, text
+    const playButton = new Button(324, 108, (documentFieldWidth / 2) - 324 / 2, 
+                                (documentFieldHeight / 2) - 108 * 2, 
+                                "#4285F4", "#0F9D58", "Play Game");
+    const rulesButton = new Button(324, 108, (documentFieldWidth / 2) - 324 / 2, 
+                                (documentFieldHeight / 2), 
+                                "#4285F4", "#0F9D58", "How To Play");
+    const controlsButton = new Button(324, 108, (documentFieldWidth / 2) - 324 / 2, 
+                                (documentFieldHeight / 2) + 108 * 2, 
+                                "#4285F4", "#0F9D58", "Controls");
+    const returnButton = new Button(432, 108, (documentFieldWidth / 2) - 432 / 2, 
+                                (documentFieldHeight / 2) + 108 * 2, 
+                                "#4285F4", "#0F9D58", "Back To Main Menu");
+
+    menu.addButton(playButton);
+    menu.addButton(rulesButton);
+    menu.addButton(returnButton);
+    menu.addButton(controlsButton);
 }
 
 init();

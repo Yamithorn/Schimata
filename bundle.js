@@ -86,6 +86,57 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./game/button.js":
+/*!************************!*\
+  !*** ./game/button.js ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Button; });
+class Button {
+    constructor(width, height, xPos, yPos, baseColor, clickedColor, text) {
+        this.width = width;
+        this.height = height;
+
+        this.xPos = xPos;
+        this.yPos = yPos;
+
+        this.baseColor = baseColor;
+        this.clickedColor = clickedColor;
+        this.color = this.baseColor;
+
+        this.text = text;
+        this.clicked = false;
+        this.active = false;
+    }
+
+    drawButton(context) {
+        context.lineWidth = 15;
+        context.strokeRect(this.xPos, this.yPos, this.width, this.height);
+        context.fillStyle = this.color;
+        context.fillRect(this.xPos, this.yPos, this.width, this.height);
+        context.font = "40px Arial";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        context.fillStyle = "black";
+        context.fillText(this.text, this.xPos + (this.width/2), this.yPos + (this.height/2));
+    }
+
+    contains(mouseX, mouseY) {
+        if ((mouseX >= this.xPos) && (mouseX <= (this.xPos + this.width)) && (mouseY >= this.yPos) && (mouseY <= (this.yPos + this.height))) {
+                return true;
+        }
+        else {
+            return false;
+        }
+    }
+}
+
+/***/ }),
+
 /***/ "./game/canvas.js":
 /*!************************!*\
   !*** ./game/canvas.js ***!
@@ -102,29 +153,15 @@ function CanvasState(canvas) {
     this.height = canvas.height;
     this.context = canvas.getContext("2d");
     this.context.lineWidth = 2;
-    this.grid = [
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false]
-    ];
-    
-    // this.context.globalCompositeOperation = "destination-over";
+    // this.grid = [
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false]
+    // ];
 
-    // When there is a border or padding, this will fix the coordinate issues that occur
-    // var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
-    // if (document.defaultView && document.defaultView.getComputedStyle) {
-    //     this.stylePaddingLeft = parseInt(document.defaultView.getComputedStyle(canvas, null)["paddingLeft"], 10) || 0;
-    //     this.stylePaddingTop = parseInt(document.defaultView.getComputedStyle(canvas, null)["paddingTop"], 10) || 0;
-    //     this.styleBorderLeft = parseInt(document.defaultView.getComputedStyle(canvas, null)["borderLeftWidth"], 10) || 0;
-    //     this.styleBorderTop = parseInt(document.defaultView.getComputedStyle(canvas, null)["borderTopWidth"], 10) || 0;
-    // }
-
-    // Some pages have fixed-position bars at the top or left of the page and will mess up the coordinates, below fixes that
-    // let html = document.body.parentNode;
-    // this.htmlTop = html.offsetTop;
-    // this.htmlLeft = html.offsetLeft;
+    // debugger;
 
     // Keeping track of state
 
@@ -155,14 +192,15 @@ function CanvasState(canvas) {
         let mouse = that.getMouse(e);
         let mouseX = mouse.x;
         let mouseY = mouse.y;
-        let shapes = that.shapes;
-        let len = shapes.length;
+        // let shapes = that.shapes;
+        let len = that.shapes.length;
 
         for (let i = len - 1; i >= 0; i--) {
-            if (shapes[i].contains(mouseX, mouseY)) {
-
+            if (that.shapes[i].contains(mouseX, mouseY)) {
+                [that.shapes[i], that.shapes[that.shapes.length - 1]] = [that.shapes[that.shapes.length - 1], that.shapes[i]];
                 that.mouseActive = true;
-                let selectedShape = shapes[i];
+                // let selectedShape = that.shapes[i];
+                let selectedShape = that.shapes[that.shapes.length - 1];
                 let length = selectedShape.cellArray.length;
 
                 for (let j = 0; j < length; j++) {
@@ -188,7 +226,6 @@ function CanvasState(canvas) {
     canvas.addEventListener("mousemove", function (e) {
 
         if (that.dragging) {
-
             let mouse = that.getMouse(e);
             let length = that.selection.cellArray.length;
 
@@ -204,13 +241,6 @@ function CanvasState(canvas) {
                 //******//
                 that.valid = false; // Something is dragging so we must redraw
             }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Iterate through the cells when they are being dragged and reset the cover back to [null, null] //
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
     }, true);
 
@@ -273,11 +303,11 @@ function CanvasState(canvas) {
         if (that.selection) {
             // debugger;
             let totalShapesLength = this.shapes.length;
-            for (let i = 0; i < totalShapesLength; i++) {
-                if (that.selection.locus !== this.shapes[i].locus) {
-                    that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
-                }
-            }
+            // for (let i = 0; i < totalShapesLength; i++) {
+            //     if (that.selection.locus !== this.shapes[i].locus) {
+            //         that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
+            //     }
+            // }
 
             let mouse = that.getMouse(e);
             let mouseX = mouse.x;
@@ -285,48 +315,42 @@ function CanvasState(canvas) {
             let length = that.selection.cellArray.length;
 
             for (let i = 0; i < length; i++) {
-                // if (that.selection.cellArray[i].xPos > (740 - 54) && that.selection.cellArray[i].yPos > (0 - 54) && 
-                //     that.selection.cellArray[i].xPos < (1280 + 54) && that.selection.cellArray[i].yPos < (54 + 540)) {
-                        // debugger;
-                if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
-                    that.selection.cellArray[i].xPos < 1280 && that.selection.cellArray[i].yPos < 540) {
-                        that.inside = true;
-                        // debugger;
-                }
-                else {
-                    for (let j = 0; j < length; j++) {
-                        // SLIGHTLY BUGGY BUT STILL WORKS
-                        // debugger;
-                        //////////////////////////////////////////////////////////////////////////////TRY WORKING FROM HERE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        that.selection.cellArray[j].xPos = that.selection.cellArray[j].originX;
-                        that.selection.cellArray[j].yPos = that.selection.cellArray[j].originY;
+                // if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
+                //     that.selection.cellArray[i].xPos < 1280 && that.selection.cellArray[i].yPos < 540) {
+                //         that.inside = true;
+                //         // debugger;
+                // }
+                // else {
+                //     for (let j = 0; j < length; j++) {
 
-                        if (that.selection.cellArray[j].cover[0] !== null && that.selection.cellArray[j].cover[1] !== null) {
-                            that.grid[that.selection.cellArray[j].cover[1]][that.selection.cellArray[j].cover[0]] = false;
-                        }
-                    }
-                    // debugger;
-                    // console.log(that.grid);
-                    that.inside = false; 
-                    break;
-                }
-            }
-            // debugger;
-            if (that.inside && !that.colliding) {
-                // debugger;
-                for (let i = 0; i < length; i++) {
-                    // add in logic to make sure all of the shapes are within the square for it to snap
-                    // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
-                    that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
-                    that.selection.cellArray[i].clicked = false;
-                }
-                // console.log(that.grid);
-                // console.log(that.selection);
+                //         that.selection.cellArray[j].xPos = that.selection.cellArray[j].originX;
+                //         that.selection.cellArray[j].yPos = that.selection.cellArray[j].originY;
 
-                that.selection.locus = null;
-                that.valid = false; // Something is dragging so we must redraw
-                that.inside = false;
+                //         // if (that.selection.cellArray[j].cover[0] !== null && that.selection.cellArray[j].cover[1] !== null) {
+                //         //     that.grid[that.selection.cellArray[j].cover[1]][that.selection.cellArray[j].cover[0]] = false;
+                //         // }
+                //     }
+
+                //     that.inside = false; 
+                //     break;
+                // }
             }
+            // // debugger;
+            // if (that.inside && !that.colliding) {
+            //     // debugger;
+            //     for (let i = 0; i < length; i++) {
+            //         // add in logic to make sure all of the shapes are within the square for it to snap
+            //         // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
+            //         that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
+            //         that.selection.cellArray[i].clicked = false;
+            //     }
+            //     // console.log(that.grid);
+            //     // console.log(that.selection);
+
+            //     that.selection.locus = null;
+            //     that.valid = false; // Something is dragging so we must redraw
+            //     that.inside = false;
+            // }
 
             for (let i = 0; i < length; i++) {
                 that.selection.cellArray[i].clicked = false;
@@ -334,14 +358,9 @@ function CanvasState(canvas) {
         }
     }, true);
 
-    // canvas.addEventListener("dblclick", function (e) {
-    //     let mouse = that.getMouse(e);
-    //     that.addShape(new Shape(mouse.x - 10, mouse.y - 10, 20, 20, "rgba(0,255,0,.6)"));
-    // }, true);
-
     this.selectionColor = "black";
     // this.selectionWidth = 2;
-    this.interval = 30;
+    this.interval = 15;
     setInterval(function () {
         that.draw();
     }, that.interval);
@@ -358,16 +377,12 @@ CanvasState.prototype.clear = function () {
 
 // While draw is called as often as the interval variable demands, it only ever does something if the canvas gets invalidated by our code
 CanvasState.prototype.draw = function () {
-
+    // debugger;
     // If our state is invalid, redraw and validate!
     if (!this.valid) {
         let context = this.context;
         let shapes = this.shapes;
         this.clear();
-
-        // Add stuff you want to be drawn in the background here
-        // Puzzle Field
-        // context.rect(540, 0, 540, 540); // x, y, width, height
         
         // Draw all shapes
         let len = shapes.length;
@@ -379,8 +394,6 @@ CanvasState.prototype.draw = function () {
             let length = shape.length;
 
             for (let j = 0; j < length; j++) {
-                // if (shape.xCoordArray[i] > this.width || shape.yCoordArray[i] > this.height || 
-                //     shape.xCoordArray[i] + shape.shapeWidthArray[i] < 0 || shape.yCoordArray[i] + shape.shapeHeightArray[i] < 0) continue;
                 if (shape[j].xPos > this.width || shape[j].yPos > this.height ||
                     shape[j].xPos + shape[j].cellSize < 0 || shape[j].yPos + shape[j].cellSize < 0) continue;
             }
@@ -388,52 +401,20 @@ CanvasState.prototype.draw = function () {
             shapes[i].draw(context);
         }
 
-        let logicLength = this.grid.length;
-        let val = 0;
-
-        for (let i = 0; i < logicLength; i++) {
-            for (let j = 0; j < logicLength; j++) {
-                if (this.grid[i][j]) {
-                    val++;
-                }
-            }
-        }
-
-        if (val === 25) {
-            alert("You win!");
-            val = 26;
-        }
-        else {
-            val = 0;
-        }
-
-        // Draw selection 
-        // Stroke along the edge of the selected shape
-        // if (this.selection != null) {
-        //     context.strokeStyle = this.selectionColor;
-        //     context.lineWidth = this.selectionWidth;
-        //     let selectedShape = this.selection;
-        //     context.strokeRect(selectedShape.xCoord, selectedShape.yCoord, selectedShape.shapeWidth, selectedShape.shapeHeight);
+        // for (let i = 0; i < 5; i++) {
+        //     for (let j = 0; j < 5; j++) {
+        //         // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
+        //         context.rect(((this.width/2) + this.width/8) + (108 * i), this.height/5 + (108 * j), 108, 108);
+        //     }
         // }
 
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < 5; j++) {
-                context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-            }
-        }
-        // context.rect(540, 0, 108, 108);
         context.stroke();
 
         if ((this.selection != null) && this.mouseActive) {
-            // debugger;
             context.strokeStyle = this.selectionColor;
-            // context.lineWidth = this.selectionWidth;
             let selectedShape = this.selection;
             let length = selectedShape.cellArray.length;
             for (let i = 0; i < length; i++) {
-                // debugger;
-                // context.strokeRect(selectedShape.xCoordArray[i], selectedShape.yCoordArray[i], 
-                //     selectedShape.shapeWidthArray[i], selectedShape.shapeHeightArray[i]);
                 context.strokeRect(selectedShape.cellArray[i].xPos, selectedShape.cellArray[i].yPos, 
                     selectedShape.cellArray[i].cellSize, selectedShape.cellArray[i].cellSize);
             }
@@ -443,10 +424,8 @@ CanvasState.prototype.draw = function () {
     }
 };
 
-// Creates an object with an x and y defined, set to the mouse position relative to that state's canvas
-
 CanvasState.prototype.getMouse = function (e) {
-    // var element = this.canvas, offsetX = 0, offsetY = 0, mouseX, mouseY;
+
     let element = this.canvas;
     let offsetX = 0;
     let offsetY = 0;
@@ -458,11 +437,6 @@ CanvasState.prototype.getMouse = function (e) {
             offsetY += element.offsetTop;
         } while ((element = element.offSetParent));
     }
-
-    // Add padding and border style widths to offset
-    // Also add the <html> offsets in case there's a position: fixed bar
-    // offsetX += this.stylePaddingLeft + this.styleBorderLeft + this.htmlLeft;
-    // offsetY += this.stylePaddingTop + this.styleBorderTop + this.htmlTop;
 
     mouseX = e.pageX - offsetX;
     mouseY = e.pageY - offsetY;
@@ -482,37 +456,262 @@ CanvasState.prototype.getMouse = function (e) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _shapes_logic__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shapes_logic */ "./game/shapes_logic.js");
-/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./canvas */ "./game/canvas.js");
-/* harmony import */ var _shapes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shapes */ "./game/shapes.js");
+/* harmony import */ var _menu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./menu */ "./game/menu.js");
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button */ "./game/button.js");
 
 
 
 
 function init() {
+
     const canvasField = document.getElementById("canvas-field");
+    const documentField = document.getElementsByClassName("body")[0];
+    const documentFieldWidth = documentField.clientWidth;
+    const documentFieldHeight = documentField.clientHeight;
 
-    canvasField.setAttribute("width", "1280");
-    canvasField.setAttribute("height", "720");
+    canvasField.setAttribute("width", documentFieldWidth);
+    canvasField.setAttribute("height", documentFieldHeight);
 
-    // const ctx = canvasField.getContext("2d");
+    let menu = new _menu__WEBPACK_IMPORTED_MODULE_0__["default"](canvasField);
 
-    // Corner square is 270 by 270
-    let state = new _canvas__WEBPACK_IMPORTED_MODULE_1__["default"](canvasField);
-    // cell is 108 by 108
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["singleCellShape"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["squareCellShape"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["smallTCellShape"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["smallLCellShape"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["bigLCellShape"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["doubleCellShape"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["singleCellShapeTwo"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["singleCellShapeThree"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["singleCellShapeFour"]));
-    state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_0__["default"](_shapes__WEBPACK_IMPORTED_MODULE_2__["squareCellShapeTwo"]));
+    // width, height, xPos, yPos, baseColor, clickedColor, text
+    const playButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - 324 / 2, 
+                                (documentFieldHeight / 2) - 108 * 2, 
+                                "#4285F4", "#0F9D58", "Play Game");
+    const rulesButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - 324 / 2, 
+                                (documentFieldHeight / 2), 
+                                "#4285F4", "#0F9D58", "How To Play");
+    const controlsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - 324 / 2, 
+                                (documentFieldHeight / 2) + 108 * 2, 
+                                "#4285F4", "#0F9D58", "Controls");
+    const returnButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](432, 108, (documentFieldWidth / 2) - 432 / 2, 
+                                (documentFieldHeight / 2) + 108 * 2, 
+                                "#4285F4", "#0F9D58", "Back To Main Menu");
+
+    menu.addButton(playButton);
+    menu.addButton(rulesButton);
+    menu.addButton(returnButton);
+    menu.addButton(controlsButton);
 }
 
 init();
+
+/***/ }),
+
+/***/ "./game/menu.js":
+/*!**********************!*\
+  !*** ./game/menu.js ***!
+  \**********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CanvasMenu; });
+/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./canvas */ "./game/canvas.js");
+/* harmony import */ var _shapes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./shapes */ "./game/shapes.js");
+/* harmony import */ var _shapes_logic__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shapes_logic */ "./game/shapes_logic.js");
+
+
+
+
+let menuLoop = true;
+
+function CanvasMenu(canvas) {
+
+    this.canvas = canvas;
+    this.width = canvas.width;
+    this.height = canvas.height;
+    this.context = canvas.getContext("2d");
+    this.buttons = {};
+    this.clickedButton = null;
+
+    this.playGame = false;
+
+    let that = this;
+
+    canvas.addEventListener("selectstart", function (event) {
+        event.preventDefault();
+        return false;
+    }, false);
+
+    canvas.addEventListener("mousedown", function (event) {
+        let mouse = that.getMouse(event);
+        const buttonKeys = Object.keys(that.buttons);
+
+        for (let i = 0; i < buttonKeys.length; i++) {
+            if (that.buttons[buttonKeys[i]].contains(mouse.x, mouse.y) && that.buttons[buttonKeys[i]].active) {
+                that.buttons[buttonKeys[i]].color = that.buttons[buttonKeys[i]].clickedColor;
+                that.clickedButton = that.buttons[buttonKeys[i]];
+            }
+        }
+    }, true);
+
+    canvas.addEventListener("mouseup", function (event) {
+        let mouse = that.getMouse(event);
+        const buttonKeys = Object.keys(that.buttons);
+        for (let i = 0; i < buttonKeys.length; i++) {
+            if (that.buttons[buttonKeys[i]].contains(mouse.x, mouse.y) && that.buttons[buttonKeys[i]].active) {
+                that.clickedButton.clicked = true;
+            }
+        }
+    }, true);
+
+    this.interval = 30;
+    setInterval(function () {
+        that.drawMenu();
+    }, that.interval);
+}
+
+CanvasMenu.prototype.drawMenu = function () {
+    if (menuLoop) {
+        const buttonKeys = Object.keys(this.buttons);
+        let howToPlay = false;
+        let controls = false;
+        let backToMainMenu = false;
+        this.clear();
+
+        for (let i = 0; i < buttonKeys.length; i++) {
+            if (this.buttons[buttonKeys[i]].clicked) {
+                if (this.buttons[buttonKeys[i]].text === "Play Game") {
+                    this.playGame = true;
+                }
+
+                else if (this.buttons[buttonKeys[i]].text === "How To Play") {
+                    howToPlay = true;
+                }
+
+                else if (this.buttons[buttonKeys[i]].text === "Controls") {
+                    controls = true;
+                }
+
+                else if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
+                    for (let i = 0; i < buttonKeys.length; i++) {
+                        this.buttons[buttonKeys[i]].clicked = false;
+                        this.buttons[buttonKeys[i]].color = this.buttons[buttonKeys[i]].baseColor;
+                    }
+                    this.clickedButton = null;
+                    this.playGame = false;
+                    howToPlay = false;
+                    controls = false;
+                    backToMainMenu = false;
+                }
+            }
+        }
+        if (!this.playGame && !howToPlay && !controls) {
+            this.context.font = "bold 60px Arial";
+            this.context.fillStyle = "black";
+            this.context.fillText("Schimata", this.width/2, this.height/7, 300);
+
+            for (let i = 0; i < buttonKeys.length; i++) {
+                if ((this.buttons[buttonKeys[i]].text === "Play Game") || 
+                (this.buttons[buttonKeys[i]].text === "How To Play") || 
+                (this.buttons[buttonKeys[i]].text === "Controls")) {
+                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].active = true;
+                }
+                else {
+                    this.buttons[buttonKeys[i]].active = false;
+                }
+            }
+        }
+
+        else if (this.playGame && !howToPlay && !backToMainMenu && !controls) {
+            for (let i = 0; i < buttonKeys.length; i++) {
+                this.buttons[buttonKeys[i]].active = false;
+            }
+            this.playGame = false;
+            menuLoop = false;
+
+            // Start game
+            const newCanvasField = document.getElementById("canvas-field");
+            let state = new _canvas__WEBPACK_IMPORTED_MODULE_0__["default"](newCanvasField);
+
+            // cell is 108 by 108
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShape"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["squareCellShape"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["smallTCellShape"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["smallLCellShape"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["bigLCellShape"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["doubleCellShape"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShapeTwo"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShapeThree"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShapeFour"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["squareCellShapeTwo"]));
+        }
+
+        else if (!this.playGame && howToPlay && !backToMainMenu && !controls) {
+            this.context.font = "bold 60px Arial";
+            this.context.fillStyle = "black";
+            this.context.fillText("Rules", this.width / 2, this.height / 5, 300);
+            this.context.fillText("Grab the pieces and place them into the grid.", this.width / 2, this.height / 3.3, 1500);
+            this.context.fillText("Populate the grid to win!", this.width / 2, this.height / 2.5, 900);
+
+            for (let i = 0; i < buttonKeys.length; i++) {
+                if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
+                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].active = true;
+                }
+                else {
+                    this.buttons[buttonKeys[i]].active = false;
+                }
+            }
+        }
+
+        else if (!this.playGame && !howToPlay && !backToMainMenu && controls) {
+            this.context.font = "bold 60px Arial";
+            this.context.fillStyle = "black";
+            this.context.fillText("Controls", this.width / 2, this.height / 5, 300);
+            this.context.fillText("Press Q to reset the board", this.width / 2, this.height / 3.3, 1500);
+            // this.context.fillText("To rotate a piece, hold it with the mouse and press R.", this.width / 2, this.height / 2.5, 1500);
+
+            for (let i = 0; i < buttonKeys.length; i++) {
+                if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
+                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].active = true;
+                }
+                else {
+                    this.buttons[buttonKeys[i]].active = false;
+                }
+            }
+        }
+
+        // Can try drawing floating pieces here
+        // for (let i = 0; i < 100; i++) {
+        //     this.context.fillRect(0 + this.i, (this.height - 100) - this.i, 100, 100);
+        //     this.i += 3;
+        // }
+    }
+};
+
+CanvasMenu.prototype.clear = function () {
+    this.context.clearRect(0, 0, this.width, this.height);
+};
+
+CanvasMenu.prototype.addButton = function (button) {
+    this.buttons[button.text] = button;
+};
+
+CanvasMenu.prototype.getMouse = function (e) {
+
+    let element = this.canvas;
+    let offsetX = 0;
+    let offsetY = 0;
+    let mouseX, mouseY;
+
+    if (element.offsetParent !== undefined) {
+        do {
+            offsetX += element.offsetLeft;
+            offsetY += element.offsetTop;
+        } while ((element = element.offSetParent));
+    }
+
+    mouseX = e.pageX - offsetX;
+    mouseY = e.pageY - offsetY;
+
+    return { x: mouseX, y: mouseY };
+};
 
 /***/ }),
 
@@ -558,6 +757,17 @@ class Shape {
 
     }
 }
+
+// export const shapeGenerator = function() {
+//     const shapeGrid = [[true, false, false],
+//                     [false, false, false],
+//                     [false, false, false]];
+//     for (let i = 0; i < shapeGrid.length; i++) {
+//         for (let j = 0; j < shapeGrid[i].length; j++) {
+
+//         }
+//     }
+// };
 
 const singleCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message

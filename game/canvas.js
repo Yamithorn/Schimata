@@ -4,29 +4,15 @@ export default function CanvasState(canvas) {
     this.height = canvas.height;
     this.context = canvas.getContext("2d");
     this.context.lineWidth = 2;
-    this.grid = [
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false],
-        [false, false, false, false, false]
-    ];
-    
-    // this.context.globalCompositeOperation = "destination-over";
+    // this.grid = [
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false],
+    //     [false, false, false, false, false]
+    // ];
 
-    // When there is a border or padding, this will fix the coordinate issues that occur
-    // var stylePaddingLeft, stylePaddingTop, styleBorderLeft, styleBorderTop;
-    // if (document.defaultView && document.defaultView.getComputedStyle) {
-    //     this.stylePaddingLeft = parseInt(document.defaultView.getComputedStyle(canvas, null)["paddingLeft"], 10) || 0;
-    //     this.stylePaddingTop = parseInt(document.defaultView.getComputedStyle(canvas, null)["paddingTop"], 10) || 0;
-    //     this.styleBorderLeft = parseInt(document.defaultView.getComputedStyle(canvas, null)["borderLeftWidth"], 10) || 0;
-    //     this.styleBorderTop = parseInt(document.defaultView.getComputedStyle(canvas, null)["borderTopWidth"], 10) || 0;
-    // }
-
-    // Some pages have fixed-position bars at the top or left of the page and will mess up the coordinates, below fixes that
-    // let html = document.body.parentNode;
-    // this.htmlTop = html.offsetTop;
-    // this.htmlLeft = html.offsetLeft;
+    // debugger;
 
     // Keeping track of state
 
@@ -57,14 +43,15 @@ export default function CanvasState(canvas) {
         let mouse = that.getMouse(e);
         let mouseX = mouse.x;
         let mouseY = mouse.y;
-        let shapes = that.shapes;
-        let len = shapes.length;
+        // let shapes = that.shapes;
+        let len = that.shapes.length;
 
         for (let i = len - 1; i >= 0; i--) {
-            if (shapes[i].contains(mouseX, mouseY)) {
-
+            if (that.shapes[i].contains(mouseX, mouseY)) {
+                [that.shapes[i], that.shapes[that.shapes.length - 1]] = [that.shapes[that.shapes.length - 1], that.shapes[i]];
                 that.mouseActive = true;
-                let selectedShape = shapes[i];
+                // let selectedShape = that.shapes[i];
+                let selectedShape = that.shapes[that.shapes.length - 1];
                 let length = selectedShape.cellArray.length;
 
                 for (let j = 0; j < length; j++) {
@@ -90,7 +77,6 @@ export default function CanvasState(canvas) {
     canvas.addEventListener("mousemove", function (e) {
 
         if (that.dragging) {
-
             let mouse = that.getMouse(e);
             let length = that.selection.cellArray.length;
 
@@ -106,13 +92,6 @@ export default function CanvasState(canvas) {
                 //******//
                 that.valid = false; // Something is dragging so we must redraw
             }
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // Iterate through the cells when they are being dragged and reset the cover back to [null, null] //
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         }
     }, true);
 
@@ -175,11 +154,11 @@ export default function CanvasState(canvas) {
         if (that.selection) {
             // debugger;
             let totalShapesLength = this.shapes.length;
-            for (let i = 0; i < totalShapesLength; i++) {
-                if (that.selection.locus !== this.shapes[i].locus) {
-                    that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
-                }
-            }
+            // for (let i = 0; i < totalShapesLength; i++) {
+            //     if (that.selection.locus !== this.shapes[i].locus) {
+            //         that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
+            //     }
+            // }
 
             let mouse = that.getMouse(e);
             let mouseX = mouse.x;
@@ -187,48 +166,42 @@ export default function CanvasState(canvas) {
             let length = that.selection.cellArray.length;
 
             for (let i = 0; i < length; i++) {
-                // if (that.selection.cellArray[i].xPos > (740 - 54) && that.selection.cellArray[i].yPos > (0 - 54) && 
-                //     that.selection.cellArray[i].xPos < (1280 + 54) && that.selection.cellArray[i].yPos < (54 + 540)) {
-                        // debugger;
-                if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
-                    that.selection.cellArray[i].xPos < 1280 && that.selection.cellArray[i].yPos < 540) {
-                        that.inside = true;
-                        // debugger;
-                }
-                else {
-                    for (let j = 0; j < length; j++) {
-                        // SLIGHTLY BUGGY BUT STILL WORKS
-                        // debugger;
-                        //////////////////////////////////////////////////////////////////////////////TRY WORKING FROM HERE/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                        that.selection.cellArray[j].xPos = that.selection.cellArray[j].originX;
-                        that.selection.cellArray[j].yPos = that.selection.cellArray[j].originY;
+                // if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
+                //     that.selection.cellArray[i].xPos < 1280 && that.selection.cellArray[i].yPos < 540) {
+                //         that.inside = true;
+                //         // debugger;
+                // }
+                // else {
+                //     for (let j = 0; j < length; j++) {
 
-                        if (that.selection.cellArray[j].cover[0] !== null && that.selection.cellArray[j].cover[1] !== null) {
-                            that.grid[that.selection.cellArray[j].cover[1]][that.selection.cellArray[j].cover[0]] = false;
-                        }
-                    }
-                    // debugger;
-                    // console.log(that.grid);
-                    that.inside = false; 
-                    break;
-                }
-            }
-            // debugger;
-            if (that.inside && !that.colliding) {
-                // debugger;
-                for (let i = 0; i < length; i++) {
-                    // add in logic to make sure all of the shapes are within the square for it to snap
-                    // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
-                    that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
-                    that.selection.cellArray[i].clicked = false;
-                }
-                // console.log(that.grid);
-                // console.log(that.selection);
+                //         that.selection.cellArray[j].xPos = that.selection.cellArray[j].originX;
+                //         that.selection.cellArray[j].yPos = that.selection.cellArray[j].originY;
 
-                that.selection.locus = null;
-                that.valid = false; // Something is dragging so we must redraw
-                that.inside = false;
+                //         // if (that.selection.cellArray[j].cover[0] !== null && that.selection.cellArray[j].cover[1] !== null) {
+                //         //     that.grid[that.selection.cellArray[j].cover[1]][that.selection.cellArray[j].cover[0]] = false;
+                //         // }
+                //     }
+
+                //     that.inside = false; 
+                //     break;
+                // }
             }
+            // // debugger;
+            // if (that.inside && !that.colliding) {
+            //     // debugger;
+            //     for (let i = 0; i < length; i++) {
+            //         // add in logic to make sure all of the shapes are within the square for it to snap
+            //         // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
+            //         that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
+            //         that.selection.cellArray[i].clicked = false;
+            //     }
+            //     // console.log(that.grid);
+            //     // console.log(that.selection);
+
+            //     that.selection.locus = null;
+            //     that.valid = false; // Something is dragging so we must redraw
+            //     that.inside = false;
+            // }
 
             for (let i = 0; i < length; i++) {
                 that.selection.cellArray[i].clicked = false;
@@ -236,14 +209,9 @@ export default function CanvasState(canvas) {
         }
     }, true);
 
-    // canvas.addEventListener("dblclick", function (e) {
-    //     let mouse = that.getMouse(e);
-    //     that.addShape(new Shape(mouse.x - 10, mouse.y - 10, 20, 20, "rgba(0,255,0,.6)"));
-    // }, true);
-
     this.selectionColor = "black";
     // this.selectionWidth = 2;
-    this.interval = 30;
+    this.interval = 15;
     setInterval(function () {
         that.draw();
     }, that.interval);
@@ -260,16 +228,12 @@ CanvasState.prototype.clear = function () {
 
 // While draw is called as often as the interval variable demands, it only ever does something if the canvas gets invalidated by our code
 CanvasState.prototype.draw = function () {
-
+    // debugger;
     // If our state is invalid, redraw and validate!
     if (!this.valid) {
         let context = this.context;
         let shapes = this.shapes;
         this.clear();
-
-        // Add stuff you want to be drawn in the background here
-        // Puzzle Field
-        // context.rect(540, 0, 540, 540); // x, y, width, height
         
         // Draw all shapes
         let len = shapes.length;
@@ -281,8 +245,6 @@ CanvasState.prototype.draw = function () {
             let length = shape.length;
 
             for (let j = 0; j < length; j++) {
-                // if (shape.xCoordArray[i] > this.width || shape.yCoordArray[i] > this.height || 
-                //     shape.xCoordArray[i] + shape.shapeWidthArray[i] < 0 || shape.yCoordArray[i] + shape.shapeHeightArray[i] < 0) continue;
                 if (shape[j].xPos > this.width || shape[j].yPos > this.height ||
                     shape[j].xPos + shape[j].cellSize < 0 || shape[j].yPos + shape[j].cellSize < 0) continue;
             }
@@ -290,52 +252,20 @@ CanvasState.prototype.draw = function () {
             shapes[i].draw(context);
         }
 
-        let logicLength = this.grid.length;
-        let val = 0;
-
-        for (let i = 0; i < logicLength; i++) {
-            for (let j = 0; j < logicLength; j++) {
-                if (this.grid[i][j]) {
-                    val++;
-                }
-            }
-        }
-
-        if (val === 25) {
-            alert("You win!");
-            val = 26;
-        }
-        else {
-            val = 0;
-        }
-
-        // Draw selection 
-        // Stroke along the edge of the selected shape
-        // if (this.selection != null) {
-        //     context.strokeStyle = this.selectionColor;
-        //     context.lineWidth = this.selectionWidth;
-        //     let selectedShape = this.selection;
-        //     context.strokeRect(selectedShape.xCoord, selectedShape.yCoord, selectedShape.shapeWidth, selectedShape.shapeHeight);
+        // for (let i = 0; i < 5; i++) {
+        //     for (let j = 0; j < 5; j++) {
+        //         // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
+        //         context.rect(((this.width/2) + this.width/8) + (108 * i), this.height/5 + (108 * j), 108, 108);
+        //     }
         // }
 
-        for (let i = 0; i < 5; i++) {
-            for (let j = 0; j < 5; j++) {
-                context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-            }
-        }
-        // context.rect(540, 0, 108, 108);
         context.stroke();
 
         if ((this.selection != null) && this.mouseActive) {
-            // debugger;
             context.strokeStyle = this.selectionColor;
-            // context.lineWidth = this.selectionWidth;
             let selectedShape = this.selection;
             let length = selectedShape.cellArray.length;
             for (let i = 0; i < length; i++) {
-                // debugger;
-                // context.strokeRect(selectedShape.xCoordArray[i], selectedShape.yCoordArray[i], 
-                //     selectedShape.shapeWidthArray[i], selectedShape.shapeHeightArray[i]);
                 context.strokeRect(selectedShape.cellArray[i].xPos, selectedShape.cellArray[i].yPos, 
                     selectedShape.cellArray[i].cellSize, selectedShape.cellArray[i].cellSize);
             }
@@ -345,10 +275,8 @@ CanvasState.prototype.draw = function () {
     }
 };
 
-// Creates an object with an x and y defined, set to the mouse position relative to that state's canvas
-
 CanvasState.prototype.getMouse = function (e) {
-    // var element = this.canvas, offsetX = 0, offsetY = 0, mouseX, mouseY;
+
     let element = this.canvas;
     let offsetX = 0;
     let offsetY = 0;
@@ -360,11 +288,6 @@ CanvasState.prototype.getMouse = function (e) {
             offsetY += element.offsetTop;
         } while ((element = element.offSetParent));
     }
-
-    // Add padding and border style widths to offset
-    // Also add the <html> offsets in case there's a position: fixed bar
-    // offsetX += this.stylePaddingLeft + this.styleBorderLeft + this.htmlLeft;
-    // offsetY += this.stylePaddingTop + this.styleBorderTop + this.htmlTop;
 
     mouseX = e.pageX - offsetX;
     mouseY = e.pageY - offsetY;

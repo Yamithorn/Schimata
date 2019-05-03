@@ -22,6 +22,17 @@ class Shape {
     }
 }
 
+// export const shapeGenerator = function() {
+//     const shapeGrid = [[true, false, false],
+//                     [false, false, false],
+//                     [false, false, false]];
+//     for (let i = 0; i < shapeGrid.length; i++) {
+//         for (let j = 0; j < shapeGrid[i].length; j++) {
+
+//         }
+//     }
+// };
+
 export const singleCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
     new Square(0, 0, 0, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
