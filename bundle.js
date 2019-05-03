@@ -503,8 +503,12 @@ function init() {
 
     const canvasField = document.getElementById("canvas-field");
     const documentField = document.getElementsByClassName("body")[0];
-    const documentFieldWidth = documentField.clientWidth;
-    const documentFieldHeight = documentField.clientHeight;
+    debugger;
+    // const documentFieldWidth = documentField.clientWidth;
+    // const documentFieldHeight = documentField.clientHeight;
+
+    const documentFieldWidth = documentField.offsetWidth;
+    const documentFieldHeight = documentField.offsetHeight;
 
     canvasField.setAttribute("width", documentFieldWidth);
     canvasField.setAttribute("height", documentFieldHeight);
