@@ -153,13 +153,13 @@ function CanvasState(canvas) {
     this.height = canvas.height;
     this.context = canvas.getContext("2d");
     this.context.lineWidth = 2;
-    // this.grid = [
-    //     [false, false, false, false, false],
-    //     [false, false, false, false, false],
-    //     [false, false, false, false, false],
-    //     [false, false, false, false, false],
-    //     [false, false, false, false, false]
-    // ];
+    this.grid = [
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false],
+        [false, false, false, false, false]
+    ];
 
     // debugger;
 
@@ -169,8 +169,8 @@ function CanvasState(canvas) {
     this.shapes = []; // The collection of shapes to be drawn
     this.dragging = false; // Keeps track of whether or not there is dragging
     this.selection = null;
-    this.dragoffXArray = []; //0;
-    this.dragoffYArray = []; //0;
+    this.dragoffXArray = []; // 0;
+    this.dragoffYArray = []; // 0;
     this.mouseActive = false;
 
     //
@@ -197,9 +197,9 @@ function CanvasState(canvas) {
 
         for (let i = len - 1; i >= 0; i--) {
             if (that.shapes[i].contains(mouseX, mouseY)) {
-                [that.shapes[i], that.shapes[that.shapes.length - 1]] = [that.shapes[that.shapes.length - 1], that.shapes[i]];
+                let pickedShape = that.shapes.splice(i, 1);
+                that.shapes = that.shapes.concat(pickedShape);
                 that.mouseActive = true;
-                // let selectedShape = that.shapes[i];
                 let selectedShape = that.shapes[that.shapes.length - 1];
                 let length = selectedShape.cellArray.length;
 
@@ -267,7 +267,7 @@ function CanvasState(canvas) {
         if (e.keyCode === 81) {
 
             let shapesLength = that.shapes.length;
-            let gridLength = that.grid.length;
+            // let gridLength = that.grid.length;
 
             for (let i = 0; i < shapesLength; i++) {
                 for (let j = 0; j < that.shapes[i].cellArray.length; j++) {
@@ -277,11 +277,11 @@ function CanvasState(canvas) {
                 }
             }
 
-            for (let i = 0; i < gridLength; i++) {
-                for (let j = 0; j < gridLength; j++) {
-                    that.grid[i][j] = false;
-                }
-            }
+            // for (let i = 0; i < gridLength; i++) {
+            //     for (let j = 0; j < gridLength; j++) {
+            //         that.grid[i][j] = false;
+            //     }
+            // }
 
             that.valid = false;
         }
@@ -302,7 +302,7 @@ function CanvasState(canvas) {
         // debugger;
         if (that.selection) {
             // debugger;
-            let totalShapesLength = this.shapes.length;
+            // let totalShapesLength = this.shapes.length;
             // for (let i = 0; i < totalShapesLength; i++) {
             //     if (that.selection.locus !== this.shapes[i].locus) {
             //         that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
@@ -317,9 +317,22 @@ function CanvasState(canvas) {
             for (let i = 0; i < length; i++) {
                 // if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
                 //     that.selection.cellArray[i].xPos < 1280 && that.selection.cellArray[i].yPos < 540) {
+                // if (that.selection.cellArray[i].xPos > ((this.width / 2) + this.width / 8) && that.selection.cellArray[i].yPos > (this.height / 5) &&
+                //     that.selection.cellArray[i].xPos < (((this.width / 2) + this.width / 8) + (108 * 5)) && that.selection.cellArray[i].yPos < (this.height / 5) + (108 * 5)) {
                 //         that.inside = true;
-                //         // debugger;
+                //         console.log("inside");
                 // }
+
+                if (that.selection.cellArray.every((element) => {
+                    return element.xPos > ((this.width / 2) + this.width / 8) && 
+                        element.xPos < (((this.width / 2) + this.width / 8) + (108 * 5)) && 
+                        element.yPos > (this.height / 5) &&
+                        element.yPos < (this.height / 5) + (108 * 5);
+                })) {
+                    that.inside = true;
+                    console.log("inside");
+                }
+
                 // else {
                 //     for (let j = 0; j < length; j++) {
 
@@ -351,6 +364,30 @@ function CanvasState(canvas) {
             //     that.valid = false; // Something is dragging so we must redraw
             //     that.inside = false;
             // }
+
+            if (that.inside) {
+                let totalShapesLength = this.shapes.length;
+                for (let i = 0; i < totalShapesLength; i++) {
+                    if (that.selection.locus !== this.shapes[i].locus) {
+                        that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
+                    }
+                }
+                if (!that.colliding) {
+                    for (let i = 0; i < length; i++) {
+                        // add in logic to make sure all of the shapes are within the square for it to snap
+                        // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
+                        // that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
+                        // that.selection.cellArray[i].clicked = false;
+
+                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) + this.width / 8), (this.height / 5), 540, 540, 108, that.grid);
+                        that.selection.cellArray[i].clicked = false;
+                    }
+                }
+
+                that.selection.locus = null;
+                that.valid = false; // Something is dragging so we must redraw
+                that.inside = false;
+            }
 
             for (let i = 0; i < length; i++) {
                 that.selection.cellArray[i].clicked = false;
@@ -401,12 +438,12 @@ CanvasState.prototype.draw = function () {
             shapes[i].draw(context);
         }
 
-        // for (let i = 0; i < 5; i++) {
-        //     for (let j = 0; j < 5; j++) {
-        //         // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-        //         context.rect(((this.width/2) + this.width/8) + (108 * i), this.height/5 + (108 * j), 108, 108);
-        //     }
-        // }
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < 5; j++) {
+                // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
+                context.rect(((this.width/2) + this.width/8) + (108 * i), this.height/5 + (108 * j), 108, 108);
+            }
+        }
 
         context.stroke();
 
@@ -771,69 +808,69 @@ class Shape {
 
 const singleCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 0, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 300, 100, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const squareCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 0, 138, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 108, 138, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
-    new Square(0, 1, 0, 246, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 108, 246, 108, "#db3236", "pink", false, "(1,1) is being clicked")
+    new Square(0, 0, 300, 238, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
+    new Square(1, 0, 408, 238, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
+    new Square(0, 1, 300, 346, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
+    new Square(1, 1, 408, 346, 108, "#db3236", "pink", false, "(1,1) is being clicked")
 ];
 
 const smallTCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 0, 384, 108, "#4885ed", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 0, 492, 108, "#4885ed", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 108, 492, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
-    new Square(0, 2, 0, 600, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
+    new Square(0, 0, 300, 484, 108, "#4885ed", "pink", false, "(0,0) is being clicked"),
+    new Square(0, 1, 300, 592, 108, "#4885ed", "pink", false, "(0,1) is being clicked"),
+    new Square(1, 1, 408, 592, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
+    new Square(0, 2, 300, 700, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
     // new Square(1, 1, 0, 600, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
     // new Square(0, 2, 108, 492, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
 ];
 
 const smallLCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 246, 0, 108, "#f4c20d", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 246, 108, 108, "#f4c20d", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 354, 108, 108, "#f4c20d", "pink", false, "(1,1) is being clicked"),
+    new Square(0, 0, 546, 100, 108, "#f4c20d", "pink", false, "(0,0) is being clicked"),
+    new Square(0, 1, 546, 208, 108, "#f4c20d", "pink", false, "(0,1) is being clicked"),
+    new Square(1, 1, 654, 208, 108, "#f4c20d", "pink", false, "(1,1) is being clicked"),
 ];
 
 const bigLCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 246, 246, 108, "#551A8B", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 246, 354, 108, "#551A8B", "pink", false, "(0,1) is being clicked"),
-    new Square(0, 2, 246, 462, 108, "#551A8B", "pink", false, "(0,2) is being clicked"),
-    new Square(1, 2, 354, 462, 108, "#551A8B", "pink", false, "(1,2) is being clicked")
+    new Square(0, 0, 546, 346, 108, "#551A8B", "pink", false, "(0,0) is being clicked"),
+    new Square(0, 1, 546, 454, 108, "#551A8B", "pink", false, "(0,1) is being clicked"),
+    new Square(0, 2, 546, 562, 108, "#551A8B", "pink", false, "(0,2) is being clicked"),
+    new Square(1, 2, 654, 562, 108, "#551A8B", "pink", false, "(1,2) is being clicked")
 ];
 
 const doubleCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 246, 590, 108, "#009999", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 354, 590, 108, "#009999", "pink", false, "(1,0) is being clicked"),
+    new Square(0, 0, 546, 690, 108, "#009999", "pink", false, "(0,0) is being clicked"),
+    new Square(1, 0, 654, 690, 108, "#009999", "pink", false, "(1,0) is being clicked"),
 ];
 
 const singleCellShapeTwo = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 782, 100, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const singleCellShapeThree = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 128, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 782, 228, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const singleCellShapeFour = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 256, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 782, 356, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const squareCellShapeTwo = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 384, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 590, 384, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
-    new Square(0, 1, 482, 492, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
-    new Square(1, 1, 590, 492, 108, "#db3236", "pink", false, "(1,1) is being clicked")
+    new Square(0, 0, 782, 484, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
+    new Square(1, 0, 890, 484, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
+    new Square(0, 1, 782, 592, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
+    new Square(1, 1, 890, 592, 108, "#db3236", "pink", false, "(1,1) is being clicked")
 ];
 
 /***/ }),
@@ -1065,7 +1102,7 @@ ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
 
                 this.cellArray[i].xPos = this.cellArray[i].originX;
                 this.cellArray[i].yPos = this.cellArray[i].originY;
-                // return true;
+                return true;
             }
         }
     }

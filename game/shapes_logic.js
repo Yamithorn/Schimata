@@ -215,7 +215,7 @@ ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
 
                 this.cellArray[i].xPos = this.cellArray[i].originX;
                 this.cellArray[i].yPos = this.cellArray[i].originY;
-                // return true;
+                return true;
             }
         }
     }
