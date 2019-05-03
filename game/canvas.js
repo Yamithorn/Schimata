@@ -175,10 +175,10 @@ export default function CanvasState(canvas) {
                 // }
 
                 if (that.selection.cellArray.every((element) => {
-                    return element.xPos > ((this.width / 2) + this.width / 8) && 
-                        element.xPos < (((this.width / 2) + this.width / 8) + (108 * 5)) && 
-                        element.yPos > (this.height / 5) &&
-                        element.yPos < (this.height / 5) + (108 * 5);
+                    return element.xPos > ((this.width / 2) - this.width / 10) && 
+                        element.xPos < (((this.width / 2) - this.width / 10) + (108 * 5)) && 
+                        element.yPos > (this.height / 11) &&
+                        element.yPos < (this.height / 11) + (108 * 5);
                 })) {
                     that.inside = true;
                     console.log("inside");
@@ -230,7 +230,7 @@ export default function CanvasState(canvas) {
                         // that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
                         // that.selection.cellArray[i].clicked = false;
 
-                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) + this.width / 8), (this.height / 5), 540, 540, 108, that.grid);
+                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), 540, 540, 108, that.grid);
                         that.selection.cellArray[i].clicked = false;
                     }
                 }
@@ -292,7 +292,7 @@ CanvasState.prototype.draw = function () {
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 5; j++) {
                 // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-                context.rect(((this.width/2) + this.width/8) + (108 * i), this.height/5 + (108 * j), 108, 108);
+                context.rect(((this.width/2) - this.width/10) + (108 * i), this.height/11 + (108 * j), 108, 108);
             }
         }
 

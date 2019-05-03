@@ -324,10 +324,10 @@ function CanvasState(canvas) {
                 // }
 
                 if (that.selection.cellArray.every((element) => {
-                    return element.xPos > ((this.width / 2) + this.width / 8) && 
-                        element.xPos < (((this.width / 2) + this.width / 8) + (108 * 5)) && 
-                        element.yPos > (this.height / 5) &&
-                        element.yPos < (this.height / 5) + (108 * 5);
+                    return element.xPos > ((this.width / 2) - this.width / 10) && 
+                        element.xPos < (((this.width / 2) - this.width / 10) + (108 * 5)) && 
+                        element.yPos > (this.height / 11) &&
+                        element.yPos < (this.height / 11) + (108 * 5);
                 })) {
                     that.inside = true;
                     console.log("inside");
@@ -379,7 +379,7 @@ function CanvasState(canvas) {
                         // that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
                         // that.selection.cellArray[i].clicked = false;
 
-                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) + this.width / 8), (this.height / 5), 540, 540, 108, that.grid);
+                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), 540, 540, 108, that.grid);
                         that.selection.cellArray[i].clicked = false;
                     }
                 }
@@ -441,7 +441,7 @@ CanvasState.prototype.draw = function () {
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 5; j++) {
                 // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-                context.rect(((this.width/2) + this.width/8) + (108 * i), this.height/5 + (108 * j), 108, 108);
+                context.rect(((this.width/2) - this.width/10) + (108 * i), this.height/11 + (108 * j), 108, 108);
             }
         }
 
@@ -495,7 +495,6 @@ CanvasState.prototype.getMouse = function (e) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _menu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./menu */ "./game/menu.js");
 /* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button */ "./game/button.js");
-
 
 
 
@@ -825,69 +824,67 @@ class Shape {
 
 const singleCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 300, 100, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 0, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const squareCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 300, 238, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 408, 238, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
-    new Square(0, 1, 300, 346, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 408, 346, 108, "#db3236", "pink", false, "(1,1) is being clicked")
+    new Square(0, 0, 0, 138, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
+    new Square(1, 0, 108, 138, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
+    new Square(0, 1, 0, 246, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
+    new Square(1, 1, 108, 246, 108, "#db3236", "pink", false, "(1,1) is being clicked")
 ];
 
 const smallTCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 300, 484, 108, "#4885ed", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 300, 592, 108, "#4885ed", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 408, 592, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
-    new Square(0, 2, 300, 700, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
-    // new Square(1, 1, 0, 600, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
-    // new Square(0, 2, 108, 492, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
+    new Square(0, 0, 0, 384, 108, "#4885ed", "pink", false, "(0,0) is being clicked"),
+    new Square(0, 1, 0, 492, 108, "#4885ed", "pink", false, "(0,1) is being clicked"),
+    new Square(1, 1, 108, 492, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
+    new Square(0, 2, 0, 600, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
 ];
 
 const smallLCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 546, 100, 108, "#f4c20d", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 546, 208, 108, "#f4c20d", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 654, 208, 108, "#f4c20d", "pink", false, "(1,1) is being clicked"),
+    new Square(0, 0, 246, 0, 108, "#f4c20d", "pink", false, "(0,0) is being clicked"),
+    new Square(0, 1, 246, 108, 108, "#f4c20d", "pink", false, "(0,1) is being clicked"),
+    new Square(1, 1, 354, 108, 108, "#f4c20d", "pink", false, "(1,1) is being clicked"),
 ];
 
 const bigLCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 546, 346, 108, "#551A8B", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 546, 454, 108, "#551A8B", "pink", false, "(0,1) is being clicked"),
-    new Square(0, 2, 546, 562, 108, "#551A8B", "pink", false, "(0,2) is being clicked"),
-    new Square(1, 2, 654, 562, 108, "#551A8B", "pink", false, "(1,2) is being clicked")
+    new Square(0, 0, 246, 246, 108, "#551A8B", "pink", false, "(0,0) is being clicked"),
+    new Square(0, 1, 246, 354, 108, "#551A8B", "pink", false, "(0,1) is being clicked"),
+    new Square(0, 2, 246, 462, 108, "#551A8B", "pink", false, "(0,2) is being clicked"),
+    new Square(1, 2, 354, 462, 108, "#551A8B", "pink", false, "(1,2) is being clicked")
 ];
 
 const doubleCellShape = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 546, 690, 108, "#009999", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 654, 690, 108, "#009999", "pink", false, "(1,0) is being clicked"),
+    new Square(0, 0, 246, 590, 108, "#009999", "pink", false, "(0,0) is being clicked"),
+    new Square(1, 0, 354, 590, 108, "#009999", "pink", false, "(1,0) is being clicked"),
 ];
 
 const singleCellShapeTwo = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 782, 100, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 482, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const singleCellShapeThree = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 782, 228, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 482, 128, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const singleCellShapeFour = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 782, 356, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+    new Square(0, 0, 482, 256, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 ];
 
 const squareCellShapeTwo = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 782, 484, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 890, 484, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
-    new Square(0, 1, 782, 592, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
-    new Square(1, 1, 890, 592, 108, "#db3236", "pink", false, "(1,1) is being clicked")
+    new Square(0, 0, 482, 384, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
+    new Square(1, 0, 590, 384, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
+    new Square(0, 1, 482, 492, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
+    new Square(1, 1, 590, 492, 108, "#db3236", "pink", false, "(1,1) is being clicked")
 ];
 
 /***/ }),

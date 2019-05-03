@@ -1,5 +1,4 @@
 import CanvasMenu from "./menu";
-
 import Button from "./button";
 
 function init() {
