@@ -2,7 +2,7 @@
 
 ### **Background and Overview**
 
-Inventory Management Simulator (IMS) is aimed to test the problem-solving skills of individuals who can solve the puzzle by putting shapes together that would fix, in a logical manner, inside of a square. The shapes are inspired from the popular game of [Tetris](https://en.wikipedia.org/wiki/Tetris).
+[Inventory Management Simulator](https://yamithorn.github.io/) (IMS) is aimed to test the problem-solving skills of individuals who can solve the puzzle by putting shapes together that would fix, in a logical manner, inside of a square. The shapes are inspired from the popular game of [Tetris](https://en.wikipedia.org/wiki/Tetris).
 
 Starting off with a 5 x 5 grid, each cell is a 1 x 1 block and the rules to the game are as follow:
 
