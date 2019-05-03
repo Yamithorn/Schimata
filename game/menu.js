@@ -91,7 +91,8 @@ CanvasMenu.prototype.drawMenu = function () {
         if (!this.playGame && !howToPlay && !controls) {
             this.context.font = "bold 60px Arial";
             this.context.fillStyle = "black";
-            this.context.fillText("Schimata", this.width/2, this.height/7, 300);
+            // this.context.fillText("Schimata", this.width/2, this.height/7, 300);
+            this.context.fillText("Schimata", (this.width / 2), this.buttons["Play Game"].yPos - 100, 300);
 
             for (let i = 0; i < buttonKeys.length; i++) {
                 if ((this.buttons[buttonKeys[i]].text === "Play Game") || 

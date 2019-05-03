@@ -503,7 +503,6 @@ function init() {
 
     const canvasField = document.getElementById("canvas-field");
     const documentField = document.getElementsByClassName("body")[0];
-    debugger;
     // const documentFieldWidth = documentField.clientWidth;
     // const documentFieldHeight = documentField.clientHeight;
 
@@ -516,18 +515,31 @@ function init() {
     let menu = new _menu__WEBPACK_IMPORTED_MODULE_0__["default"](canvasField);
 
     // width, height, xPos, yPos, baseColor, clickedColor, text
-    const playButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - 324 / 2, 
-                                (documentFieldHeight / 2) - 108 * 2, 
-                                "#4285F4", "#0F9D58", "Play Game");
-    const rulesButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - 324 / 2, 
-                                (documentFieldHeight / 2), 
-                                "#4285F4", "#0F9D58", "How To Play");
-    const controlsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - 324 / 2, 
-                                (documentFieldHeight / 2) + 108 * 2, 
-                                "#4285F4", "#0F9D58", "Controls");
-    const returnButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](432, 108, (documentFieldWidth / 2) - 432 / 2, 
-                                (documentFieldHeight / 2) + 108 * 2, 
-                                "#4285F4", "#0F9D58", "Back To Main Menu");
+    // const playButton = new Button(324, 108, (documentFieldWidth / 2) - 324 / 2, 
+    //                             (documentFieldHeight / 2) - 108 * 2, 
+    //                             "#4285F4", "#0F9D58", "Play Game");
+    // const rulesButton = new Button(324, 108, (documentFieldWidth / 2) - 324 / 2, 
+    //                             (documentFieldHeight / 2), 
+    //                             "#4285F4", "#0F9D58", "How To Play");
+    // const controlsButton = new Button(324, 108, (documentFieldWidth / 2) - 324 / 2, 
+    //                             (documentFieldHeight / 2) + 108 * 2, 
+    //                             "#4285F4", "#0F9D58", "Controls");
+    // const returnButton = new Button(432, 108, (documentFieldWidth / 2) - 432 / 2, 
+    //                             (documentFieldHeight / 2) + 108 * 2, 
+    //                             "#4285F4", "#0F9D58", "Back To Main Menu");
+
+    const playButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2) - 108 * 2,
+        "#4285F4", "#0F9D58", "Play Game");
+    const rulesButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2),
+        "#4285F4", "#0F9D58", "How To Play");
+    const controlsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2) + 108 * 2,
+        "#4285F4", "#0F9D58", "Controls");
+    const returnButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](432, 108, (documentFieldWidth / 2) - documentFieldHeight / 4,
+        (documentFieldHeight / 2) + 108 * 2,
+        "#4285F4", "#0F9D58", "Back To Main Menu");
 
     menu.addButton(playButton);
     menu.addButton(rulesButton);
@@ -642,7 +654,8 @@ CanvasMenu.prototype.drawMenu = function () {
         if (!this.playGame && !howToPlay && !controls) {
             this.context.font = "bold 60px Arial";
             this.context.fillStyle = "black";
-            this.context.fillText("Schimata", this.width/2, this.height/7, 300);
+            // this.context.fillText("Schimata", this.width/2, this.height/7, 300);
+            this.context.fillText("Schimata", (this.width / 2), this.buttons["Play Game"].yPos - 100, 300);
 
             for (let i = 0; i < buttonKeys.length; i++) {
                 if ((this.buttons[buttonKeys[i]].text === "Play Game") || 
