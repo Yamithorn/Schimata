@@ -30,17 +30,17 @@ function init() {
     //                             (documentFieldHeight / 2) + 108 * 2, 
     //                             "#4285F4", "#0F9D58", "Back To Main Menu");
 
-    const playButton = new Button(324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
-        (documentFieldHeight / 2) - 108 * 2,
+    const playButton = new Button(documentFieldWidth * 0.16875, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2) - documentFieldHeight * 0.22,
         "#4285F4", "#0F9D58", "Play Game");
-    const rulesButton = new Button(324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
+    const rulesButton = new Button(documentFieldWidth * 0.16875, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 12,
         (documentFieldHeight / 2),
         "#4285F4", "#0F9D58", "How To Play");
-    const controlsButton = new Button(324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
-        (documentFieldHeight / 2) + 108 * 2,
+    const controlsButton = new Button(documentFieldWidth * 0.16875, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2) + documentFieldHeight * 0.22,
         "#4285F4", "#0F9D58", "Controls");
-    const returnButton = new Button(432, 108, (documentFieldWidth / 2) - documentFieldHeight / 4,
-        (documentFieldHeight / 2) + 108 * 2,
+    const returnButton = new Button(documentFieldWidth * 0.225, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 9,
+        (documentFieldHeight / 2) + documentFieldHeight * 0.22,
         "#4285F4", "#0F9D58", "Back To Main Menu");
 
     menu.addButton(playButton);

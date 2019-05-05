@@ -15,12 +15,13 @@ export default class Button {
         this.active = false;
     }
 
-    drawButton(context) {
+    drawButton(context, canvasWidth) {
         context.lineWidth = 15;
         context.strokeRect(this.xPos, this.yPos, this.width, this.height);
         context.fillStyle = this.color;
         context.fillRect(this.xPos, this.yPos, this.width, this.height);
-        context.font = "40px Arial";
+        // context.font = "40px Arial";
+        context.font = Math.trunc(canvasWidth * 0.021) + "px Arial";
         context.textAlign = "center";
         context.textBaseline = "middle";
         context.fillStyle = "black";

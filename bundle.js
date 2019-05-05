@@ -113,12 +113,13 @@ class Button {
         this.active = false;
     }
 
-    drawButton(context) {
+    drawButton(context, canvasWidth) {
         context.lineWidth = 15;
         context.strokeRect(this.xPos, this.yPos, this.width, this.height);
         context.fillStyle = this.color;
         context.fillRect(this.xPos, this.yPos, this.width, this.height);
-        context.font = "40px Arial";
+        // context.font = "40px Arial";
+        context.font = Math.trunc(canvasWidth * 0.021) + "px Arial";
         context.textAlign = "center";
         context.textBaseline = "middle";
         context.fillStyle = "black";
@@ -313,6 +314,7 @@ function CanvasState(canvas) {
             let mouseX = mouse.x;
             let mouseY = mouse.y;
             let length = that.selection.cellArray.length;
+            let temp = Math.trunc(this.width * 0.05625);
 
             for (let i = 0; i < length; i++) {
                 // if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
@@ -325,9 +327,9 @@ function CanvasState(canvas) {
 
                 if (that.selection.cellArray.every((element) => {
                     return element.xPos > ((this.width / 2) - this.width / 10) && 
-                        element.xPos < (((this.width / 2) - this.width / 10) + (108 * 5)) && 
+                        element.xPos < (((this.width / 2) - this.width / 10) + (temp * 5)) && 
                         element.yPos > (this.height / 11) &&
-                        element.yPos < (this.height / 11) + (108 * 5);
+                        element.yPos < (this.height / 11) + (temp * 5);
                 })) {
                     that.inside = true;
                     console.log("inside");
@@ -369,7 +371,7 @@ function CanvasState(canvas) {
                 let totalShapesLength = this.shapes.length;
                 for (let i = 0; i < totalShapesLength; i++) {
                     if (that.selection.locus !== this.shapes[i].locus) {
-                        that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], 108);
+                        that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], temp);
                     }
                 }
                 if (!that.colliding) {
@@ -378,8 +380,9 @@ function CanvasState(canvas) {
                         // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
                         // that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
                         // that.selection.cellArray[i].clicked = false;
-
-                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), 540, 540, 108, that.grid);
+                        
+                        // that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), 540, 540, temp, that.grid);
+                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), Math.trunc(this.width * 0.28125), Math.trunc(this.width * 0.28125), temp, that.grid);
                         that.selection.cellArray[i].clicked = false;
                     }
                 }
@@ -423,6 +426,7 @@ CanvasState.prototype.draw = function () {
         
         // Draw all shapes
         let len = shapes.length;
+        let temp = Math.trunc(this.width * 0.05625);
 
         for (let i = 0; i < len; i++) {
 
@@ -441,7 +445,8 @@ CanvasState.prototype.draw = function () {
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 5; j++) {
                 // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-                context.rect(((this.width/2) - this.width/10) + (108 * i), this.height/11 + (108 * j), 108, 108);
+                // context.rect(((this.width/2) - this.width/10) + (108 * i), this.height/11 + (108 * j), 108, 108);
+                context.rect(((this.width / 2) - this.width / 10) + (temp * i), this.height / 11 + (temp * j), temp, temp);
             }
         }
 
@@ -527,17 +532,17 @@ function init() {
     //                             (documentFieldHeight / 2) + 108 * 2, 
     //                             "#4285F4", "#0F9D58", "Back To Main Menu");
 
-    const playButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
-        (documentFieldHeight / 2) - 108 * 2,
+    const playButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](documentFieldWidth * 0.16875, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2) - documentFieldHeight * 0.22,
         "#4285F4", "#0F9D58", "Play Game");
-    const rulesButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
+    const rulesButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](documentFieldWidth * 0.16875, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 12,
         (documentFieldHeight / 2),
         "#4285F4", "#0F9D58", "How To Play");
-    const controlsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](324, 108, (documentFieldWidth / 2) - documentFieldWidth / 12,
-        (documentFieldHeight / 2) + 108 * 2,
+    const controlsButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](documentFieldWidth * 0.16875, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 12,
+        (documentFieldHeight / 2) + documentFieldHeight * 0.22,
         "#4285F4", "#0F9D58", "Controls");
-    const returnButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](432, 108, (documentFieldWidth / 2) - documentFieldHeight / 4,
-        (documentFieldHeight / 2) + 108 * 2,
+    const returnButton = new _button__WEBPACK_IMPORTED_MODULE_1__["default"](documentFieldWidth * 0.225, documentFieldHeight * 0.11, (documentFieldWidth / 2) - documentFieldWidth / 9,
+        (documentFieldHeight / 2) + documentFieldHeight * 0.22,
         "#4285F4", "#0F9D58", "Back To Main Menu");
 
     menu.addButton(playButton);
@@ -621,6 +626,7 @@ CanvasMenu.prototype.drawMenu = function () {
         let howToPlay = false;
         let controls = false;
         let backToMainMenu = false;
+        let temp = Math.trunc(this.width * 0.05625);
         this.clear();
 
         for (let i = 0; i < buttonKeys.length; i++) {
@@ -651,16 +657,16 @@ CanvasMenu.prototype.drawMenu = function () {
             }
         }
         if (!this.playGame && !howToPlay && !controls) {
-            this.context.font = "bold 60px Arial";
+            this.context.font = "bold " + Math.trunc(this.width * 0.03125) + "px Arial";
             this.context.fillStyle = "black";
             // this.context.fillText("Schimata", this.width/2, this.height/7, 300);
             this.context.fillText("Schimata", (this.width / 2), this.buttons["Play Game"].yPos - 100, 300);
-
+            
             for (let i = 0; i < buttonKeys.length; i++) {
                 if ((this.buttons[buttonKeys[i]].text === "Play Game") || 
                 (this.buttons[buttonKeys[i]].text === "How To Play") || 
                 (this.buttons[buttonKeys[i]].text === "Controls")) {
-                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].drawButton(this.context, this.width);
                     this.buttons[buttonKeys[i]].active = true;
                 }
                 else {
@@ -682,20 +688,84 @@ CanvasMenu.prototype.drawMenu = function () {
 
             // cell is 108 by 108
 
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShape"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["squareCellShape"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["smallTCellShape"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["smallLCellShape"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["bigLCellShape"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["doubleCellShape"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShapeTwo"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShapeThree"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["singleCellShapeFour"]));
-            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"](_shapes__WEBPACK_IMPORTED_MODULE_1__["squareCellShapeTwo"]));
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, 0, 0, temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, 0, temp + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(0,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 0, temp, temp + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(1,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 1, 0, (temp * 2) + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(0,1) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 1, temp, (temp * 2) + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(1,1) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, 0, (temp * 3) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(0,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 1, 0, (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(0,1) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 1, temp, (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(1,1) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 2, 0, (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(0,2) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 2) + Math.trunc(this.width * 0.015625), 0, temp, "#f4c20d", "pink", false, "(0,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 1, (temp * 2) + Math.trunc(this.width * 0.015625), temp, temp, "#f4c20d", "pink", false, "(0,1) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 1, (temp * 3) + Math.trunc(this.width * 0.015625), temp, temp, "#f4c20d", "pink", false, "(1,1) is being clicked"),
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 2) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(0,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 1, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 3) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(0,1) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 2, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 4) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(0,2) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 2, (temp * 3) + Math.trunc(this.width * 0.015625), (temp * 4) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(1,2) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#009999", "pink", false, "(0,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 0, (temp * 3) + Math.trunc(this.width * 0.015625), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#009999", "pink", false, "(1,0) is being clicked"),
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), 0, temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), temp + Math.trunc(this.width * 0.015625), temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), (temp * 2) + Math.trunc(this.width * 0.03125), temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new _shapes_logic__WEBPACK_IMPORTED_MODULE_2__["default"]([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(0,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 0, (temp * 5) + Math.trunc(this.width * 0.03125), (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(0,1) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](0, 1, (temp * 4) + Math.trunc(this.width * 0.03125), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(1,0) is being clicked"),
+                new _shapes__WEBPACK_IMPORTED_MODULE_1__["Square"](1, 1, (temp * 5) + Math.trunc(this.width * 0.03125), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(1,1) is being clicked")
+            ]));
+            // state.addShape(new ShapeContainer(singleCellShape)); //checked
+            // state.addShape(new ShapeContainer(squareCellShape)); //checked
+            // state.addShape(new ShapeContainer(smallTCellShape)); // checked
+            // state.addShape(new ShapeContainer(smallLCellShape)); // checked
+            // state.addShape(new ShapeContainer(bigLCellShape)); // checked
+            // state.addShape(new ShapeContainer(doubleCellShape)); // checked
+            // state.addShape(new ShapeContainer(singleCellShapeTwo));
+            // state.addShape(new ShapeContainer(singleCellShapeThree));
+            // state.addShape(new ShapeContainer(singleCellShapeFour));
+            // state.addShape(new ShapeContainer(squareCellShapeTwo));
         }
 
         else if (!this.playGame && howToPlay && !backToMainMenu && !controls) {
-            this.context.font = "bold 60px Arial";
+            this.context.font = "bold " + Math.trunc(this.width * 0.03125) + "px Arial";
             this.context.fillStyle = "black";
             this.context.fillText("Rules", this.width / 2, this.height / 5, 300);
             this.context.fillText("Grab the pieces and place them into the grid.", this.width / 2, this.height / 3.3, 1500);
@@ -703,7 +773,7 @@ CanvasMenu.prototype.drawMenu = function () {
 
             for (let i = 0; i < buttonKeys.length; i++) {
                 if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
-                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].drawButton(this.context, this.width);
                     this.buttons[buttonKeys[i]].active = true;
                 }
                 else {
@@ -713,7 +783,7 @@ CanvasMenu.prototype.drawMenu = function () {
         }
 
         else if (!this.playGame && !howToPlay && !backToMainMenu && controls) {
-            this.context.font = "bold 60px Arial";
+            this.context.font = "bold " + Math.trunc(this.width * 0.03125) + "px Arial";
             this.context.fillStyle = "black";
             this.context.fillText("Controls", this.width / 2, this.height / 5, 300);
             this.context.fillText("Press Q to reset the board", this.width / 2, this.height / 3.3, 1500);
@@ -721,7 +791,7 @@ CanvasMenu.prototype.drawMenu = function () {
 
             for (let i = 0; i < buttonKeys.length; i++) {
                 if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
-                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].drawButton(this.context, this.width);
                     this.buttons[buttonKeys[i]].active = true;
                 }
                 else {
@@ -772,20 +842,12 @@ CanvasMenu.prototype.getMouse = function (e) {
 /*!************************!*\
   !*** ./game/shapes.js ***!
   \************************/
-/*! exports provided: singleCellShape, squareCellShape, smallTCellShape, smallLCellShape, bigLCellShape, doubleCellShape, singleCellShapeTwo, singleCellShapeThree, singleCellShapeFour, squareCellShapeTwo */
+/*! exports provided: Square, squareCellShapeTwo */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "singleCellShape", function() { return singleCellShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "squareCellShape", function() { return squareCellShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "smallTCellShape", function() { return smallTCellShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "smallLCellShape", function() { return smallLCellShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bigLCellShape", function() { return bigLCellShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "doubleCellShape", function() { return doubleCellShape; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "singleCellShapeTwo", function() { return singleCellShapeTwo; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "singleCellShapeThree", function() { return singleCellShapeThree; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "singleCellShapeFour", function() { return singleCellShapeFour; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Square", function() { return Square; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "squareCellShapeTwo", function() { return squareCellShapeTwo; });
 class Square {
     constructor(xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, message) {
@@ -822,62 +884,62 @@ class Shape {
 //     }
 // };
 
-const singleCellShape = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 0, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
-];
+// export const singleCellShape = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 0, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+// ];
 
-const squareCellShape = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 0, 138, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 108, 138, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
-    new Square(0, 1, 0, 246, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 108, 246, 108, "#db3236", "pink", false, "(1,1) is being clicked")
-];
+// export const squareCellShape = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 0, 138, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
+//     new Square(1, 0, 108, 138, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
+//     new Square(0, 1, 0, 246, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
+//     new Square(1, 1, 108, 246, 108, "#db3236", "pink", false, "(1,1) is being clicked")
+// ];
 
-const smallTCellShape = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 0, 384, 108, "#4885ed", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 0, 492, 108, "#4885ed", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 108, 492, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
-    new Square(0, 2, 0, 600, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
-];
+// export const smallTCellShape = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 0, 384, 108, "#4885ed", "pink", false, "(0,0) is being clicked"),
+//     new Square(0, 1, 0, 492, 108, "#4885ed", "pink", false, "(0,1) is being clicked"),
+//     new Square(1, 1, 108, 492, 108, "#4885ed", "pink", false, "(1,1) is being clicked"),
+//     new Square(0, 2, 0, 600, 108, "#4885ed", "pink", false, "(0,2) is being clicked")
+// ];
 
-const smallLCellShape = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 246, 0, 108, "#f4c20d", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 246, 108, 108, "#f4c20d", "pink", false, "(0,1) is being clicked"),
-    new Square(1, 1, 354, 108, 108, "#f4c20d", "pink", false, "(1,1) is being clicked"),
-];
+// export const smallLCellShape = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 246, 0, 108, "#f4c20d", "pink", false, "(0,0) is being clicked"),
+//     new Square(0, 1, 246, 108, 108, "#f4c20d", "pink", false, "(0,1) is being clicked"),
+//     new Square(1, 1, 354, 108, 108, "#f4c20d", "pink", false, "(1,1) is being clicked"),
+// ];
 
-const bigLCellShape = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 246, 246, 108, "#551A8B", "pink", false, "(0,0) is being clicked"),
-    new Square(0, 1, 246, 354, 108, "#551A8B", "pink", false, "(0,1) is being clicked"),
-    new Square(0, 2, 246, 462, 108, "#551A8B", "pink", false, "(0,2) is being clicked"),
-    new Square(1, 2, 354, 462, 108, "#551A8B", "pink", false, "(1,2) is being clicked")
-];
+// export const bigLCellShape = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 246, 246, 108, "#551A8B", "pink", false, "(0,0) is being clicked"),
+//     new Square(0, 1, 246, 354, 108, "#551A8B", "pink", false, "(0,1) is being clicked"),
+//     new Square(0, 2, 246, 462, 108, "#551A8B", "pink", false, "(0,2) is being clicked"),
+//     new Square(1, 2, 354, 462, 108, "#551A8B", "pink", false, "(1,2) is being clicked")
+// ];
 
-const doubleCellShape = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 246, 590, 108, "#009999", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 354, 590, 108, "#009999", "pink", false, "(1,0) is being clicked"),
-];
+// export const doubleCellShape = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 246, 590, 108, "#009999", "pink", false, "(0,0) is being clicked"),
+//     new Square(1, 0, 354, 590, 108, "#009999", "pink", false, "(1,0) is being clicked"),
+// ];
 
-const singleCellShapeTwo = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
-];
+// export const singleCellShapeTwo = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 482, 0, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+// ];
 
-const singleCellShapeThree = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 128, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
-];
+// export const singleCellShapeThree = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 482, 128, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+// ];
 
-const singleCellShapeFour = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 256, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
-];
+// export const singleCellShapeFour = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 482, 256, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
+// ];
 
 const squareCellShapeTwo = [
     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message

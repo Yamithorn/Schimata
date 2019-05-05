@@ -1,8 +1,5 @@
 import CanvasState from "./canvas";
-import {
-    singleCellShape, singleCellShapeTwo, singleCellShapeThree, singleCellShapeFour,
-    doubleCellShape, squareCellShape, squareCellShapeTwo, smallTCellShape, smallLCellShape, bigLCellShape
-} from "./shapes";
+import { Square } from "./shapes";
 import ShapeContainer from "./shapes_logic";
 
 let menuLoop = true;
@@ -59,6 +56,7 @@ CanvasMenu.prototype.drawMenu = function () {
         let howToPlay = false;
         let controls = false;
         let backToMainMenu = false;
+        let temp = Math.trunc(this.width * 0.05625);
         this.clear();
 
         for (let i = 0; i < buttonKeys.length; i++) {
@@ -89,16 +87,16 @@ CanvasMenu.prototype.drawMenu = function () {
             }
         }
         if (!this.playGame && !howToPlay && !controls) {
-            this.context.font = "bold 60px Arial";
+            this.context.font = "bold " + Math.trunc(this.width * 0.03125) + "px Arial";
             this.context.fillStyle = "black";
             // this.context.fillText("Schimata", this.width/2, this.height/7, 300);
             this.context.fillText("Schimata", (this.width / 2), this.buttons["Play Game"].yPos - 100, 300);
-
+            
             for (let i = 0; i < buttonKeys.length; i++) {
                 if ((this.buttons[buttonKeys[i]].text === "Play Game") || 
                 (this.buttons[buttonKeys[i]].text === "How To Play") || 
                 (this.buttons[buttonKeys[i]].text === "Controls")) {
-                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].drawButton(this.context, this.width);
                     this.buttons[buttonKeys[i]].active = true;
                 }
                 else {
@@ -120,20 +118,84 @@ CanvasMenu.prototype.drawMenu = function () {
 
             // cell is 108 by 108
 
-            state.addShape(new ShapeContainer(singleCellShape));
-            state.addShape(new ShapeContainer(squareCellShape));
-            state.addShape(new ShapeContainer(smallTCellShape));
-            state.addShape(new ShapeContainer(smallLCellShape));
-            state.addShape(new ShapeContainer(bigLCellShape));
-            state.addShape(new ShapeContainer(doubleCellShape));
-            state.addShape(new ShapeContainer(singleCellShapeTwo));
-            state.addShape(new ShapeContainer(singleCellShapeThree));
-            state.addShape(new ShapeContainer(singleCellShapeFour));
-            state.addShape(new ShapeContainer(squareCellShapeTwo));
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, 0, 0, temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, 0, temp + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(0,0) is being clicked"),
+                new Square(1, 0, temp, temp + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(1,0) is being clicked"),
+                new Square(0, 1, 0, (temp * 2) + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(0,1) is being clicked"),
+                new Square(1, 1, temp, (temp * 2) + Math.trunc(this.width * 0.015625), temp, "#db3236", "pink", false, "(1,1) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, 0, (temp * 3) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(0,0) is being clicked"),
+                new Square(0, 1, 0, (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(0,1) is being clicked"),
+                new Square(1, 1, temp, (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(1,1) is being clicked"),
+                new Square(0, 2, 0, (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#4885ed", "pink", false, "(0,2) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 2) + Math.trunc(this.width * 0.015625), 0, temp, "#f4c20d", "pink", false, "(0,0) is being clicked"),
+                new Square(0, 1, (temp * 2) + Math.trunc(this.width * 0.015625), temp, temp, "#f4c20d", "pink", false, "(0,1) is being clicked"),
+                new Square(1, 1, (temp * 3) + Math.trunc(this.width * 0.015625), temp, temp, "#f4c20d", "pink", false, "(1,1) is being clicked"),
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 2) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(0,0) is being clicked"),
+                new Square(0, 1, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 3) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(0,1) is being clicked"),
+                new Square(0, 2, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 4) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(0,2) is being clicked"),
+                new Square(1, 2, (temp * 3) + Math.trunc(this.width * 0.015625), (temp * 4) + Math.trunc(this.width * 0.015625), temp, "#551A8B", "pink", false, "(1,2) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 2) + Math.trunc(this.width * 0.015625), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#009999", "pink", false, "(0,0) is being clicked"),
+                new Square(1, 0, (temp * 3) + Math.trunc(this.width * 0.015625), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#009999", "pink", false, "(1,0) is being clicked"),
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), 0, temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), temp + Math.trunc(this.width * 0.015625), temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), (temp * 2) + Math.trunc(this.width * 0.03125), temp, "#3cba54", "pink", false, "(0, 0) is being clicked")
+            ]));
+
+            state.addShape(new ShapeContainer([
+                // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+                new Square(0, 0, (temp * 4) + Math.trunc(this.width * 0.03125), (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(0,0) is being clicked"),
+                new Square(1, 0, (temp * 5) + Math.trunc(this.width * 0.03125), (temp * 4) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(0,1) is being clicked"),
+                new Square(0, 1, (temp * 4) + Math.trunc(this.width * 0.03125), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(1,0) is being clicked"),
+                new Square(1, 1, (temp * 5) + Math.trunc(this.width * 0.03125), (temp * 5) + Math.trunc(this.width * 0.03125), temp, "#db3236", "pink", false, "(1,1) is being clicked")
+            ]));
+            // state.addShape(new ShapeContainer(singleCellShape)); //checked
+            // state.addShape(new ShapeContainer(squareCellShape)); //checked
+            // state.addShape(new ShapeContainer(smallTCellShape)); // checked
+            // state.addShape(new ShapeContainer(smallLCellShape)); // checked
+            // state.addShape(new ShapeContainer(bigLCellShape)); // checked
+            // state.addShape(new ShapeContainer(doubleCellShape)); // checked
+            // state.addShape(new ShapeContainer(singleCellShapeTwo));
+            // state.addShape(new ShapeContainer(singleCellShapeThree));
+            // state.addShape(new ShapeContainer(singleCellShapeFour));
+            // state.addShape(new ShapeContainer(squareCellShapeTwo));
         }
 
         else if (!this.playGame && howToPlay && !backToMainMenu && !controls) {
-            this.context.font = "bold 60px Arial";
+            this.context.font = "bold " + Math.trunc(this.width * 0.03125) + "px Arial";
             this.context.fillStyle = "black";
             this.context.fillText("Rules", this.width / 2, this.height / 5, 300);
             this.context.fillText("Grab the pieces and place them into the grid.", this.width / 2, this.height / 3.3, 1500);
@@ -141,7 +203,7 @@ CanvasMenu.prototype.drawMenu = function () {
 
             for (let i = 0; i < buttonKeys.length; i++) {
                 if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
-                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].drawButton(this.context, this.width);
                     this.buttons[buttonKeys[i]].active = true;
                 }
                 else {
@@ -151,7 +213,7 @@ CanvasMenu.prototype.drawMenu = function () {
         }
 
         else if (!this.playGame && !howToPlay && !backToMainMenu && controls) {
-            this.context.font = "bold 60px Arial";
+            this.context.font = "bold " + Math.trunc(this.width * 0.03125) + "px Arial";
             this.context.fillStyle = "black";
             this.context.fillText("Controls", this.width / 2, this.height / 5, 300);
             this.context.fillText("Press Q to reset the board", this.width / 2, this.height / 3.3, 1500);
@@ -159,7 +221,7 @@ CanvasMenu.prototype.drawMenu = function () {
 
             for (let i = 0; i < buttonKeys.length; i++) {
                 if (this.buttons[buttonKeys[i]].text === "Back To Main Menu") {
-                    this.buttons[buttonKeys[i]].drawButton(this.context);
+                    this.buttons[buttonKeys[i]].drawButton(this.context, this.width);
                     this.buttons[buttonKeys[i]].active = true;
                 }
                 else {
