@@ -252,14 +252,17 @@ function CanvasState(canvas) {
         that.mouseActive = false;
         // that.selection = null;
 
-        // if (that.selection) {
-        //     let length = that.selection.cellArray.length;
-        //     for (let i = 0; i < length; i++) {
-        //         that.selection.cellArray[i].xPos = that.selection.cellArray[i].originX;
-        //         that.selection.cellArray[i].yPos = that.selection.cellArray[i].originY;
-        //         that.selection.cellArray[i].clicked = false;
-        //     }
-        // }
+        if (that.selection !== null) {
+            if ((that.selection.cellArray[0].xPos < 0 || that.selection.cellArray[0].xPos > that.width) ||
+                (that.selection.cellArray[0].yPos < 0 || that.selection.cellArray[0].yPos > that.height)) {
+                let length = that.selection.cellArray.length;
+                for (let i = 0; i < length; i++) {
+                    that.selection.cellArray[i].xPos = that.selection.cellArray[i].originX;
+                    that.selection.cellArray[i].yPos = that.selection.cellArray[i].originY;
+                    that.selection.cellArray[i].clicked = false;
+                }
+            }
+        }
         that.valid = false;
         // debugger;
     }, true);
@@ -317,23 +320,16 @@ function CanvasState(canvas) {
             let temp = Math.trunc(this.width * 0.05625);
 
             for (let i = 0; i < length; i++) {
-                // if (that.selection.cellArray[i].xPos > 740 && that.selection.cellArray[i].yPos > 0 &&
-                //     that.selection.cellArray[i].xPos < 1280 && that.selection.cellArray[i].yPos < 540) {
-                // if (that.selection.cellArray[i].xPos > ((this.width / 2) + this.width / 8) && that.selection.cellArray[i].yPos > (this.height / 5) &&
-                //     that.selection.cellArray[i].xPos < (((this.width / 2) + this.width / 8) + (108 * 5)) && that.selection.cellArray[i].yPos < (this.height / 5) + (108 * 5)) {
-                //         that.inside = true;
-                //         console.log("inside");
-                // }
 
                 if (that.selection.cellArray.every((element) => {
                     // return element.xPos > ((this.width / 2) - this.width / 10) && 
                     //     element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) && 
                     //     element.yPos > (this.height / 11) &&
                     //     element.yPos < (this.height / 11) + (temp * 4);
-                    return element.xPos > ((this.width / 2) - this.width / 10) - Math.trunc(temp/2) &&
-                        element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) + Math.trunc(temp / 2) &&
-                        element.yPos > (this.height / 11) - Math.trunc(temp / 2) &&
-                        element.yPos < ((this.height / 11) + (temp * 4)) + Math.trunc(temp / 2);
+                    return element.xPos > ((this.width / 2) - this.width / 10) - Math.trunc(temp) &&
+                        element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) + Math.trunc(temp) &&
+                        element.yPos > (this.height / 11) - Math.trunc(temp) &&
+                        element.yPos < ((this.height / 11) + (temp * 4)) + Math.trunc(temp);
                 })) {
                     that.inside = true;
                     // console.log("inside");
@@ -380,14 +376,15 @@ function CanvasState(canvas) {
                         // debugger;
                     }
                 }
-                // if (!that.colliding) {
+
+                if (!that.colliding) {
                     // debugger;
                     for (let i = 0; i < length; i++) {
                         
                         that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), Math.trunc(this.width * 0.28125), Math.trunc(this.width * 0.28125), temp, that.grid);
                         that.selection.cellArray[i].clicked = false;
                     }
-                // }
+                }
 
                 that.selection.locus = null;
                 that.valid = false; // Something is dragging so we must redraw
@@ -1016,7 +1013,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
             let gridYCellTop = gridYPosition + (gridCellSize * i);
             let gridXCellBottom = gridXPosition + (gridCellSize * (j + 1));
             let gridYCellBottom = gridYPosition + (gridCellSize * (i + 1));
-
+            // check if every corner of each cell is inside the grid to then snap
             if (mouseX >= gridXCellTop && 
                 mouseX <= gridXCellBottom &&
                 mouseY >= gridYCellTop && 
@@ -1162,6 +1159,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
 ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
     let cellArrayLength = this.cellArray.length;
     let shapeLength = shape.cellArray.length;
+    let colliding = false;
 
     for (let i = 0; i < cellArrayLength; i++) {
         for (let j = 0; j < shapeLength; j++) {
@@ -1175,13 +1173,21 @@ ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
             //     this.cellArray[i].yPos < (shape.cellArray[j].yPos + cellSize) &&
             //     (this.cellArray[i].yPos + cellSize) > shape.cellArray[j].yPos) {
 
-                this.cellArray[i].xPos = this.cellArray[i].originX;
-                this.cellArray[i].yPos = this.cellArray[i].originY;
-                return true;
+                // this.cellArray[i].xPos = this.cellArray[i].originX;
+                // this.cellArray[i].yPos = this.cellArray[i].originY;
+                colliding = true;
             }
         }
     }
-    return false;
+
+    if (colliding) {
+        for (let i = 0; i < cellArrayLength; i++) {
+            this.cellArray[i].xPos = this.cellArray[i].originX;
+            this.cellArray[i].yPos = this.cellArray[i].originY;
+        }
+    }
+
+    return colliding;
 };
 
 /***/ })

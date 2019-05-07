@@ -53,7 +53,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
             let gridYCellTop = gridYPosition + (gridCellSize * i);
             let gridXCellBottom = gridXPosition + (gridCellSize * (j + 1));
             let gridYCellBottom = gridYPosition + (gridCellSize * (i + 1));
-
+            // check if every corner of each cell is inside the grid to then snap
             if (mouseX >= gridXCellTop && 
                 mouseX <= gridXCellBottom &&
                 mouseY >= gridYCellTop && 
@@ -199,6 +199,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
 ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
     let cellArrayLength = this.cellArray.length;
     let shapeLength = shape.cellArray.length;
+    let colliding = false;
 
     for (let i = 0; i < cellArrayLength; i++) {
         for (let j = 0; j < shapeLength; j++) {
@@ -212,11 +213,19 @@ ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
             //     this.cellArray[i].yPos < (shape.cellArray[j].yPos + cellSize) &&
             //     (this.cellArray[i].yPos + cellSize) > shape.cellArray[j].yPos) {
 
-                this.cellArray[i].xPos = this.cellArray[i].originX;
-                this.cellArray[i].yPos = this.cellArray[i].originY;
-                return true;
+                // this.cellArray[i].xPos = this.cellArray[i].originX;
+                // this.cellArray[i].yPos = this.cellArray[i].originY;
+                colliding = true;
             }
         }
     }
-    return false;
+
+    if (colliding) {
+        for (let i = 0; i < cellArrayLength; i++) {
+            this.cellArray[i].xPos = this.cellArray[i].originX;
+            this.cellArray[i].yPos = this.cellArray[i].originY;
+        }
+    }
+
+    return colliding;
 };
