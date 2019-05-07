@@ -90,10 +90,10 @@ class Shape {
 //     new Square(0, 0, 482, 256, 108, "#3cba54", "pink", false, "(0, 0) is being clicked")
 // ];
 
-export const squareCellShapeTwo = [
-    // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
-    new Square(0, 0, 482, 384, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
-    new Square(1, 0, 590, 384, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
-    new Square(0, 1, 482, 492, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
-    new Square(1, 1, 590, 492, 108, "#db3236", "pink", false, "(1,1) is being clicked")
-];
+// export const squareCellShapeTwo = [
+//     // xGrid, yGrid, xPos, yPos, cellSize, baseColor, clickedColor, clicked, state, message
+//     new Square(0, 0, 482, 384, 108, "#db3236", "pink", false, "(0,0) is being clicked"),
+//     new Square(1, 0, 590, 384, 108, "#db3236", "pink", false, "(0,1) is being clicked"),
+//     new Square(0, 1, 482, 492, 108, "#db3236", "pink", false, "(1,0) is being clicked"),
+//     new Square(1, 1, 590, 492, 108, "#db3236", "pink", false, "(1,1) is being clicked")
+// ];

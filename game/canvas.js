@@ -176,13 +176,17 @@ export default function CanvasState(canvas) {
                 // }
 
                 if (that.selection.cellArray.every((element) => {
-                    return element.xPos > ((this.width / 2) - this.width / 10) && 
-                        element.xPos < (((this.width / 2) - this.width / 10) + (temp * 5)) && 
-                        element.yPos > (this.height / 11) &&
-                        element.yPos < (this.height / 11) + (temp * 5);
+                    // return element.xPos > ((this.width / 2) - this.width / 10) && 
+                    //     element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) && 
+                    //     element.yPos > (this.height / 11) &&
+                    //     element.yPos < (this.height / 11) + (temp * 4);
+                    return element.xPos > ((this.width / 2) - this.width / 10) - Math.trunc(temp/2) &&
+                        element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) + Math.trunc(temp / 2) &&
+                        element.yPos > (this.height / 11) - Math.trunc(temp / 2) &&
+                        element.yPos < ((this.height / 11) + (temp * 4)) + Math.trunc(temp / 2);
                 })) {
                     that.inside = true;
-                    console.log("inside");
+                    // console.log("inside");
                 }
 
                 // else {
@@ -221,21 +225,19 @@ export default function CanvasState(canvas) {
                 let totalShapesLength = this.shapes.length;
                 for (let i = 0; i < totalShapesLength; i++) {
                     if (that.selection.locus !== this.shapes[i].locus) {
+                        // THE PROBLEM IS HERE, IT CHECKS IT FOR EVERY SHAPE
                         that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], temp);
+                        // debugger;
                     }
                 }
-                if (!that.colliding) {
+                // if (!that.colliding) {
+                    // debugger;
                     for (let i = 0; i < length; i++) {
-                        // add in logic to make sure all of the shapes are within the square for it to snap
-                        // console.log(`mouse x is ${mouseX} and mouse y is ${mouseY}`);
-                        // that.selection.overlapping(mouseX, mouseY, 740, 0, 540, 540, 108, that.grid);
-                        // that.selection.cellArray[i].clicked = false;
                         
-                        // that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), 540, 540, temp, that.grid);
                         that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), Math.trunc(this.width * 0.28125), Math.trunc(this.width * 0.28125), temp, that.grid);
                         that.selection.cellArray[i].clicked = false;
                     }
-                }
+                // }
 
                 that.selection.locus = null;
                 that.valid = false; // Something is dragging so we must redraw
@@ -294,9 +296,8 @@ CanvasState.prototype.draw = function () {
 
         for (let i = 0; i < 5; i++) {
             for (let j = 0; j < 5; j++) {
-                // context.rect(740 + (108 * i), 0 + (108 * j), 108, 108);
-                // context.rect(((this.width/2) - this.width/10) + (108 * i), this.height/11 + (108 * j), 108, 108);
                 context.rect(((this.width / 2) - this.width / 10) + (temp * i), this.height / 11 + (temp * j), temp, temp);
+                // context.rect(Math.trunc(this.width / 1.8) + (temp * i), this.height / 4 + (temp * j), temp, temp);
             }
         }
 

@@ -65,7 +65,6 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
             //     mouseCenterY <= gridYCellBottom) {
 
                 for (let k = 0; k < length; k++) {
-
                     if (this.locus[0] > this.cellArray[k].xGrid) { // 
                         if (this.locus[1] > this.cellArray[k].yGrid) {
                             this.cellArray[k].xPos = (gridXPosition + (gridCellSize * (j - this.locus[0]))) - (this.cellArray[k].xGrid * gridCellSize);
@@ -219,5 +218,5 @@ ShapeContainer.prototype.overlappingOtherShapes = function(shape, cellSize) {
             }
         }
     }
-    // return false;
+    return false;
 };
