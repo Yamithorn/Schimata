@@ -183,6 +183,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
             }
 
             else {
+                // debugger;
                 for (let k = 0; k < length; k++) { 
                     this.cellArray[k].xPos = this.cellArray[k].originX;
                     this.cellArray[k].yPos = this.cellArray[k].originY;

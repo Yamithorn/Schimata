@@ -250,11 +250,12 @@ function CanvasState(canvas) {
         that.dragoffXArray = [];
         that.dragoffYArray = [];
         that.mouseActive = false;
+        let temp = Math.trunc(this.width * 0.05625);
         // that.selection = null;
 
         if (that.selection !== null) {
-            if ((that.selection.cellArray[0].xPos < 0 || that.selection.cellArray[0].xPos > that.width) ||
-                (that.selection.cellArray[0].yPos < 0 || that.selection.cellArray[0].yPos > that.height)) {
+            if ((that.selection.cellArray[0].xPos < 0 || that.selection.cellArray[0].xPos + temp > that.width) ||
+                (that.selection.cellArray[0].yPos < 0 || that.selection.cellArray[0].yPos + temp > that.height)) {
                 let length = that.selection.cellArray.length;
                 for (let i = 0; i < length; i++) {
                     that.selection.cellArray[i].xPos = that.selection.cellArray[i].originX;
@@ -317,19 +318,19 @@ function CanvasState(canvas) {
             let mouseX = mouse.x;
             let mouseY = mouse.y;
             let length = that.selection.cellArray.length;
-            let temp = Math.trunc(this.width * 0.05625);
+            let temp = Math.trunc(that.width * 0.05625);
 
             for (let i = 0; i < length; i++) {
 
                 if (that.selection.cellArray.every((element) => {
-                    // return element.xPos > ((this.width / 2) - this.width / 10) && 
-                    //     element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) && 
-                    //     element.yPos > (this.height / 11) &&
-                    //     element.yPos < (this.height / 11) + (temp * 4);
-                    return element.xPos > ((this.width / 2) - this.width / 10) - Math.trunc(temp) &&
-                        element.xPos < (((this.width / 2) - this.width / 10) + (temp * 4)) + Math.trunc(temp) &&
-                        element.yPos > (this.height / 11) - Math.trunc(temp) &&
-                        element.yPos < ((this.height / 11) + (temp * 4)) + Math.trunc(temp);
+                    // return element.xPos > ((that.width / 2) - that.width / 10) && 
+                    //     element.xPos < (((that.width / 2) - that.width / 10) + (temp * 4)) && 
+                    //     element.yPos > (that.height / 11) &&
+                    //     element.yPos < (that.height / 11) + (temp * 4);
+                    return element.xPos > ((that.width / 2) - that.width / 10) - Math.trunc(temp) &&
+                        element.xPos < (((that.width / 2) - that.width / 10) + (temp * 4)) + Math.trunc(temp) &&
+                        element.yPos > (that.height / 11) - Math.trunc(temp) &&
+                        element.yPos < ((that.height / 11) + (temp * 4)) + Math.trunc(temp);
                 })) {
                     that.inside = true;
                     // console.log("inside");
@@ -350,6 +351,7 @@ function CanvasState(canvas) {
                 //     break;
                 // }
             }
+            // debugger;
             // // debugger;
             // if (that.inside && !that.colliding) {
             //     // debugger;
@@ -368,20 +370,20 @@ function CanvasState(canvas) {
             // }
 
             if (that.inside) {
-                let totalShapesLength = this.shapes.length;
+                let totalShapesLength = that.shapes.length;
                 for (let i = 0; i < totalShapesLength; i++) {
-                    if (that.selection.locus !== this.shapes[i].locus) {
+                    if (that.selection.locus !== that.shapes[i].locus) {
                         // THE PROBLEM IS HERE, IT CHECKS IT FOR EVERY SHAPE
-                        that.colliding = that.selection.overlappingOtherShapes(this.shapes[i], temp);
+                        that.colliding = that.selection.overlappingOtherShapes(that.shapes[i], temp);
                         // debugger;
                     }
                 }
-
+                // debugger;
                 if (!that.colliding) {
                     // debugger;
                     for (let i = 0; i < length; i++) {
                         
-                        that.selection.overlapping(mouseX, mouseY, ((this.width / 2) - this.width / 10), (this.height / 11), Math.trunc(this.width * 0.28125), Math.trunc(this.width * 0.28125), temp, that.grid);
+                        that.selection.overlapping(mouseX, mouseY, ((that.width / 2) - that.width / 10), (that.height / 11), Math.trunc(that.width * 0.28125), Math.trunc(that.width * 0.28125), temp, that.grid);
                         that.selection.cellArray[i].clicked = false;
                     }
                 }
@@ -390,6 +392,13 @@ function CanvasState(canvas) {
                 that.valid = false; // Something is dragging so we must redraw
                 that.inside = false;
             }
+
+            // else {
+            //     for (let i = 0; i < length; i++) {
+            //         that.selection.cellArray[i].xPos = that.selection.cellArray[i].originX;
+            //         that.selection.cellArray[i].yPos = that.selection.cellArray[i].originY;
+            //     }
+            // }
 
             for (let i = 0; i < length; i++) {
                 that.selection.cellArray[i].clicked = false;
@@ -1143,6 +1152,7 @@ ShapeContainer.prototype.overlapping = function (mouseX, mouseY, gridXPosition, 
             }
 
             else {
+                // debugger;
                 for (let k = 0; k < length; k++) { 
                     this.cellArray[k].xPos = this.cellArray[k].originX;
                     this.cellArray[k].yPos = this.cellArray[k].originY;
